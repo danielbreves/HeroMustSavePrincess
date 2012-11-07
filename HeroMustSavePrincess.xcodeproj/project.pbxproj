@@ -13,6 +13,7 @@
 		12C9C69D164A383E00F1F2D8 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C69C164A383E00F1F2D8 /* sansation.ttf */; };
 		12C9C69F164A383E00F1F2D8 /* cute_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C69E164A383E00F1F2D8 /* cute_image.jpg */; };
 		12C9C6A4164A383E00F1F2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C6A2164A383E00F1F2D8 /* InfoPlist.strings */; };
+		12C9C6AC164A386500F1F2D8 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6AA164A386500F1F2D8 /* Engine.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,8 @@
 		12C9C69E164A383E00F1F2D8 /* cute_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cute_image.jpg; sourceTree = "<group>"; };
 		12C9C6A1164A383E00F1F2D8 /* HeroMustSavePrincess-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HeroMustSavePrincess-Info.plist"; sourceTree = "<group>"; };
 		12C9C6A3164A383E00F1F2D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		12C9C6AA164A386500F1F2D8 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Engine.cpp; sourceTree = "<group>"; };
+		12C9C6AB164A386500F1F2D8 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Engine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 			isa = PBXGroup;
 			children = (
 				12C9C696164A383E00F1F2D8 /* main.cpp */,
+				12C9C6AA164A386500F1F2D8 /* Engine.cpp */,
+				12C9C6AB164A386500F1F2D8 /* Engine.h */,
 				12C9C698164A383E00F1F2D8 /* ResourcePath.mm */,
 				12C9C69A164A383E00F1F2D8 /* ResourcePath.hpp */,
 				12C9C69B164A383E00F1F2D8 /* Resources */,
@@ -177,6 +182,7 @@
 			files = (
 				12C9C697164A383E00F1F2D8 /* main.cpp in Sources */,
 				12C9C699164A383E00F1F2D8 /* ResourcePath.mm in Sources */,
+				12C9C6AC164A386500F1F2D8 /* Engine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,7 +206,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = "";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -265,7 +271,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_OBJC_ARC = "";
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
