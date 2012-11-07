@@ -8,6 +8,9 @@
 
 #include "Engine.h"
 
+#define SCREEN_WIDTH    800
+#define SCREEN_HEIGHT   600
+#define SCREEN_BPP      32
 
 Engine::Engine()
 {
@@ -21,7 +24,7 @@ Engine::~Engine()
 
 bool Engine::Init()
 {
-	window = new sf::RenderWindow(sf::VideoMode(800, 600, 32), "RPG");
+	window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP), "Hero Must Save Princess");
     
 	if(!window)
 		return false;
