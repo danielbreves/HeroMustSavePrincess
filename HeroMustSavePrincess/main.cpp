@@ -7,12 +7,11 @@
 //
 
 #include <SFML/Graphics.hpp>
-#include "ResourcePath.hpp"
 #include "Engine.h"
 
 int main (int argc, const char * argv[])
 {
-	Engine* engine = new Engine();
+	Engine* engine = new Engine(800, 600, 32);
     
 	try {
 		engine->Go();
