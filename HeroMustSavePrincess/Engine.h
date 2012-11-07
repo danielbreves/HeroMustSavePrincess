@@ -11,26 +11,32 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "ImageManager.h"
+#include "Camera.h"
+#include "Level.h"
+#include "Tile.h"
 
 class Engine
 {
 private:
-	//SFML Render Window
-	sf::RenderWindow* window;
+	sf::RenderWindow* window;    
+    ImageManager imageManager;
+    sf::Vector2i videoSize;
+    int tileSize;
+    Camera* camera;
+    Level* currentLevel;
+    bool mouseDown;
     
-	//Initializes the engine
 	bool Init();
-	//Main Game Loop
 	void MainLoop();
-	//Renders one frame
 	void RenderFrame();
-	//Processes user input
 	void ProcessInput();
-	//Updates all Engine internals
 	void Update();
+    void LoadImages();
+    void LoadLevel();
     
 public:
-	Engine();
+	Engine(int w, int h, int tSize);
 	~Engine();
     
 	void Go();					//Starts the engine
