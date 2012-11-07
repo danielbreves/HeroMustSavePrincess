@@ -10,8 +10,6 @@
 		12C9C694164A383E00F1F2D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C9C693164A383E00F1F2D8 /* Foundation.framework */; };
 		12C9C697164A383E00F1F2D8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C696164A383E00F1F2D8 /* main.cpp */; };
 		12C9C699164A383E00F1F2D8 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C698164A383E00F1F2D8 /* ResourcePath.mm */; };
-		12C9C69D164A383E00F1F2D8 /* sansation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C69C164A383E00F1F2D8 /* sansation.ttf */; };
-		12C9C69F164A383E00F1F2D8 /* cute_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C69E164A383E00F1F2D8 /* cute_image.jpg */; };
 		12C9C6A4164A383E00F1F2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C6A2164A383E00F1F2D8 /* InfoPlist.strings */; };
 		12C9C6AC164A386500F1F2D8 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6AA164A386500F1F2D8 /* Engine.cpp */; };
 /* End PBXBuildFile section */
@@ -22,8 +20,6 @@
 		12C9C696164A383E00F1F2D8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		12C9C698164A383E00F1F2D8 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
 		12C9C69A164A383E00F1F2D8 /* ResourcePath.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePath.hpp; sourceTree = "<group>"; };
-		12C9C69C164A383E00F1F2D8 /* sansation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sansation.ttf; sourceTree = "<group>"; };
-		12C9C69E164A383E00F1F2D8 /* cute_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cute_image.jpg; sourceTree = "<group>"; };
 		12C9C6A1164A383E00F1F2D8 /* HeroMustSavePrincess-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HeroMustSavePrincess-Info.plist"; sourceTree = "<group>"; };
 		12C9C6A3164A383E00F1F2D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		12C9C6AA164A386500F1F2D8 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Engine.cpp; sourceTree = "<group>"; };
@@ -84,8 +80,6 @@
 		12C9C69B164A383E00F1F2D8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				12C9C69C164A383E00F1F2D8 /* sansation.ttf */,
-				12C9C69E164A383E00F1F2D8 /* cute_image.jpg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -151,8 +145,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12C9C69D164A383E00F1F2D8 /* sansation.ttf in Resources */,
-				12C9C69F164A383E00F1F2D8 /* cute_image.jpg in Resources */,
 				12C9C6A4164A383E00F1F2D8 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
