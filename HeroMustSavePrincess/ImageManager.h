@@ -18,13 +18,21 @@ class ImageManager
 {
 private:
 	vector<sf::Texture> imageList;
+    map<int, int> imageIDs;
+    
+    int tileSize;
     
 public:
 	ImageManager();
 	~ImageManager();
     
-	void AddImage(sf::Texture& image);
-	sf::Texture& GetImage(int index);
+	void setTileSize(int tileSize) { this->tileSize = tileSize; }
+    
+	void AddImage(sf::Texture& image, int id);
+	sf::Texture& GetImage(int id);
+    
+	//Loads tileset from xml format
+	void LoadTileset(std::string filename);
 };
 
 #endif /* defined(__HeroMustSavePrincess__ImageManager__) */

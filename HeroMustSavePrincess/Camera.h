@@ -44,6 +44,8 @@ public:
 	void Update();
     
 	sf::Vector2i GetPosition() { return sf::Vector2i((int)position.x, (int)position.y); }
+    
+    sf::Vector2i GetSize() { return size; }
 	
 	//Helper function for retrieving camera's offset from
 	//nearest tile

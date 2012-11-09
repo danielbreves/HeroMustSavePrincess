@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include "Tile.h"
+#include "ImageManager.h"
 
 class Level
 {
@@ -26,13 +27,13 @@ private:
 	void SetDimensions(int w, int h);
 	
 public:
-	Level(int w, int h);
+	Level();
 	~Level();
     
 	void AddTile(int x, int y, Tile* tile);
 	Tile* GetTile(unsigned int x, unsigned int y);
     
-	void LoadLevel();
+	void LoadLevel(std::string filename, ImageManager& imageManager);
     
 	int GetWidth();
 	int GetHeight();

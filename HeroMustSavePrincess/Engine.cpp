@@ -7,19 +7,29 @@
 //
 
 #include "Engine.h"
+#include "Animation.h"
 #include "ResourcePath.hpp"
 
-#define SCREEN_BPP 32
+#define SCREEN_BPP      32
+#define SPRITE_SPEED    2
+#define SPRITE_WIDTH    32
+#define SPRITE_HEIGHT   32
+#define FPS             25
 
 Engine::Engine(int w, int h, int tSize)
 {
     videoSize = sf::Vector2i(w, h);
     tileSize = tSize;
+    imageManager.setTileSize(tileSize);
 }
 
 Engine::~Engine()
 {
-    
+    delete player;
+    delete spriteManager;
+    delete currentLevel;
+    delete camera;
+    delete window;
 }
 
 bool Engine::Init()
@@ -32,10 +42,56 @@ bool Engine::Init()
 	if(!window)
 		return false;
     
-    LoadImages();
-    LoadLevel();
+    currentLevel = new Level;
+	currentLevel->LoadLevel(resourcePath() + "level1.xml", imageManager);
+    
+    spriteManager = new SpriteManager(currentLevel, tileSize);
+    
+    sf::Texture* hero = new sf::Texture; // memory leak
+    
+    hero->loadFromFile(resourcePath() + "hero.png");
+    
+    player = new Player(*hero, sf::Vector2i(videoSize.x/2, videoSize.y/2), SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED);
     
 	return true;
+}
+
+void Engine::ProcessInput()
+{
+	sf::Event evt;
+	//Loop through all window events
+	while(window->pollEvent(evt))
+	{
+		if(evt.type == sf::Event::Closed) {
+			window->close();
+		}
+	}
+    
+    sf::IntRect bounds = camera->GetTileBounds(tileSize);
+        
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && player->GetPosition().x > -camera->GetPosition().x) {
+        player->Action(Player::WEST);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
+        (player->GetPosition().x + SPRITE_WIDTH + camera->GetTileOffset(tileSize).x + SPRITE_SPEED) / tileSize < currentLevel->GetWidth() - bounds.left) {
+        player->Action(Player::EAST);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && player->GetPosition().y > -camera->GetPosition().y) {
+        player->Action(Player::NORTH);
+    }
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
+        (player->GetPosition().y + SPRITE_HEIGHT + camera->GetTileOffset(tileSize).y + SPRITE_SPEED) / tileSize < currentLevel->GetHeight() - bounds.top) {
+        player->Action(Player::SOUTH);
+    }
+}
+
+void Engine::Update()
+{
+    player->Update();
+    player->CheckCollisions(spriteManager->GetSprites());
+    camera->MoveCenter(player->GetPosition().x, player->GetPosition().y);
+    camera->Update();
+    spriteManager->Update(camera, tileSize);
 }
 
 void Engine::RenderFrame()
@@ -69,75 +125,27 @@ void Engine::RenderFrame()
 		}
 	}
     
+    spriteManager->Draw(window, camera);
+    
+    player->Draw(window);
+    
 	window->display();
-}
-
-void Engine::ProcessInput()
-{
-	sf::Event evt;
-	//Loop through all window events
-	while(window->pollEvent(evt))
-	{
-		if(evt.type == sf::Event::Closed)
-			window->close();
-		
-		if((evt.type == sf::Event::MouseButtonPressed) && (mouseDown == false))
-		{
-            sf::Vector2i mousePos = sf::Mouse::getPosition(*window);
-			int x = camera->GetPosition().x + mousePos.x;
-			int y = camera->GetPosition().y + mousePos.y;
-			camera->GoToCenter(x, y);
-			mouseDown = true;
-		}
-		if(evt.type == sf::Event::MouseButtonReleased)
-			mouseDown = false;
-	}
-}
-
-void Engine::Update()
-{
-    camera->Update();
-}
-
-void Engine::LoadImages()
-{
-	sf::Texture image1;
-	image1.loadFromFile(resourcePath() + "tile1.gif");
-	imageManager.AddImage(image1);
-    
-    sf::Texture image2;
-    image2.loadFromFile(resourcePath() + "tile2.gif");
-    imageManager.AddImage(image2);    
-}
-
-void Engine::LoadLevel()
-{
-	//Temporary level for testing
-	currentLevel = new Level(40, 40);
-    
-	Tile* tile;
-	for(int y = 0; y < 40; y++)
-	{
-		for(int x = 0; x < 40; x++)
-		{
-			if(y % 4 == 0)
-				tile = new Tile(imageManager.GetImage(1));
-			else
-				tile = new Tile(imageManager.GetImage(0));
-            
-			currentLevel->AddTile(x, y, tile);
-		}
-	}
 }
 
 void Engine::MainLoop()
 {
+    sf::Int32 timelastcall = clock.getElapsedTime().asMilliseconds();
+    
 	//Loop until our window is closed
 	while(window->isOpen())
 	{
-		ProcessInput();
-		Update();
-		RenderFrame();
+        if (window->isOpen() && clock.getElapsedTime().asMilliseconds() - timelastcall > 1000/FPS) {
+            ProcessInput();
+            Update();
+            timelastcall = clock.getElapsedTime().asMilliseconds();
+        }
+        
+        RenderFrame();
 	}
 }
 
