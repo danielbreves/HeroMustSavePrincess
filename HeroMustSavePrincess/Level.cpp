@@ -9,6 +9,8 @@
 #include <fstream>
 #include "Level.h"
 #include "rapidxml.hpp"
+#include <cstdio>
+#include <stdlib.h>
 #include "ResourcePath.hpp"
 using namespace rapidxml;
 
@@ -22,18 +24,11 @@ Level::~Level()
     
 }
 
-int Level::GetHeight()
-{
-	return h;
-}
-
-int Level::GetWidth()
-{
-	return w;
-}
-
 void Level::SetDimensions(int w, int h)
 {
+    this->w = w;
+	this->h = h;
+    
 	//w rows
 	map.resize(w);
     
@@ -68,73 +63,59 @@ Tile* Level::GetTile(unsigned int x, unsigned int y)
 	}
 }
 
-void Level::LoadLevel(std::string filename, ImageManager& imageManager)
-{
-	//Loads a level from xml file
-	//Load the file
-	std::ifstream inFile(filename.c_str());
+void Level::LoadMap(std::string filename, ImageManager& imageManager) {
+    Tmx::Map *map = new Tmx::Map();
+	map->ParseFile(filename);
     
-	if(!inFile)
-		throw "Could not load tileset: " + filename;
+    if (map->HasError()) {
+		printf("error code: %d\n", map->GetErrorCode());
+		printf("error text: %s\n", map->GetErrorText().c_str());
+        
+		exit(map->GetErrorCode());
+	}
+        
+    SetDimensions(map->GetWidth(), map->GetHeight());
     
-	//Dump contents of file into a string
-	std::string xmlContents;
+    LoadTilesets(map, imageManager);
+}
+
+void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
+    sf::Image img;
+    tileSize = map->GetTileWidth();
     
-	//Blocked out of preference
-	{
-		std::string line;
-		while(std::getline(inFile, line))
-			xmlContents += line;
+    // Iterate through the tilesets.
+	for (int i = 0; i < map->GetNumTilesets(); ++i) {
+		// Get a tileset.
+		const Tmx::Tileset *tileset = map->GetTileset(i);
+        
+        //Get the image file we're parsing and load it
+		img.loadFromFile(resourcePath() + tileset->GetImage()->GetSource());
+        
+        int rows = tileset->GetImage()->GetWidth() / tileSize;
+        int cols = tileset->GetImage()->GetHeight() / tileSize;
+        
+        for (int y = 0, i = 1; y < cols; ++y) {
+            for (int x = 0; x < rows; ++i, ++x) {
+                //Copy the right tile image from tileset
+                sf::Texture tileImage;
+                tileImage.create(tileSize, tileSize);
+                tileImage.loadFromImage(img, sf::IntRect(x * tileSize, y * tileSize, tileSize, tileSize));
+                
+                //Add the image to our image list
+                imageManager.AddImage(tileImage, i);
+            }
+        }
 	}
     
-	//Convert string to rapidxml readable char*
-	std::vector<char> xmlData = std::vector<char>(xmlContents.begin(), xmlContents.end());
-    xmlData.push_back('\0');
+    const Tmx::Layer *layer = map->GetLayer(0);
     
-	//Create a parsed document with &xmlData[0] which is the char*
-	xml_document<> doc;
-	doc.parse<parse_no_data_nodes>(&xmlData[0]);
-    
-	//Get the root node
-	xml_node<>* root = doc.first_node();
-    
-	//Get level attributes
-	int width = atoi(root->first_attribute("width")->value());
-	int height = atoi(root->first_attribute("height")->value());
-    
-	//Resize level
-	this->w = width;
-	this->h = height;
-	SetDimensions(width, height);
-    
-	//Load each necessary tileset
-	xml_node<>* tileset = root->first_node("tileset");
-	while(tileset)
-	{
-		std::string path = resourcePath() + tileset->first_attribute("path")->value();
-		//Load tileset
-		imageManager.LoadTileset(path);
-		//Go to next tileset
-		tileset = tileset->next_sibling("tileset");
-	}
-    
-	//Go through each tile
-	xml_node<>* tile = root->first_node("tile");
-	while(tile)
-	{
-		//Get all the attributes
-		int x = atoi(tile->first_attribute("x")->value());
-		int y = atoi(tile->first_attribute("y")->value());
-		int baseid = atoi(tile->first_attribute("baseid")->value());
-        
-		//std::string walkString = tile->first_attribute("walkable")->value();
-		//bool walkable = (walkString == "true")? true : false;
-        
-		//Create the tile and add it to the level.
-		Tile* newTile = new Tile(imageManager.GetImage(baseid));
-		AddTile(x, y, newTile);
-        
-		//Go to the next tile
-		tile = tile->next_sibling("tile");
+    for (int y = 0; y < layer->GetHeight(); ++y) {
+        for (int x = 0; x < layer->GetWidth(); ++x) {
+            //Get all the attributes
+            int id = layer->GetTileId(x, y);
+            
+            Tile* newTile = new Tile(imageManager.GetImage(id));
+            AddTile(x, y, newTile);
+        }
 	}
 }

@@ -20,7 +20,7 @@ SpriteManager::SpriteManager(Level* level, int tileSize) {
     srand((unsigned int)time(0));
     sf::Vector2i position;
     
-    sf::Texture* badguy = new sf::Texture; // memory leak
+    sf::Texture* badguy = new sf::Texture;
     
     badguy->loadFromFile(resourcePath() + "badguy.png");
     

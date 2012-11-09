@@ -11,7 +11,7 @@
 
 int main (int argc, const char * argv[])
 {
-	Engine* engine = new Engine(800, 600, 32);
+	Engine* engine = new Engine(800, 600);
     
 	try {
 		engine->Go();

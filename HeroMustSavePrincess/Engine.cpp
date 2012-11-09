@@ -16,11 +16,9 @@
 #define SPRITE_HEIGHT   32
 #define FPS             25
 
-Engine::Engine(int w, int h, int tSize)
+Engine::Engine(int w, int h)
 {
     videoSize = sf::Vector2i(w, h);
-    tileSize = tSize;
-    imageManager.setTileSize(tileSize);
 }
 
 Engine::~Engine()
@@ -43,11 +41,13 @@ bool Engine::Init()
 		return false;
     
     currentLevel = new Level;
-	currentLevel->LoadLevel(resourcePath() + "level1.xml", imageManager);
+    currentLevel->LoadMap(resourcePath() + "tiled_test2.tmx", imageManager);
+	
+    tileSize = currentLevel->GetTileSize();
     
     spriteManager = new SpriteManager(currentLevel, tileSize);
     
-    sf::Texture* hero = new sf::Texture; // memory leak
+    sf::Texture* hero = new sf::Texture;
     
     hero->loadFromFile(resourcePath() + "hero.png");
     
@@ -68,6 +68,16 @@ void Engine::ProcessInput()
 	}
     
     sf::IntRect bounds = camera->GetTileBounds(tileSize);
+    
+    cout << "player->GetPosition().x: " << player->GetPosition().x << endl;
+    cout << "player->GetPosition().y: " << player->GetPosition().y << endl;
+    cout << "camera->GetPosition().x: " << camera->GetPosition().x << endl;
+    cout << "camera->GetPosition().y: " << camera->GetPosition().y << endl;
+    cout << "bounds.left: " << bounds.left << endl;
+    cout << "bounds.top: " << bounds.top << endl;
+    cout << "player x?: " << ((player->GetPosition().x + SPRITE_WIDTH + camera->GetTileOffset(tileSize).x + SPRITE_SPEED) / tileSize) << endl;
+    cout << "boundary x?: " << currentLevel->GetWidth() << endl;
+    
         
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && player->GetPosition().x > -camera->GetPosition().x) {
         player->Action(Player::WEST);

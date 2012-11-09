@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include "../TmxParser/Tmx.h"
 #include "Tile.h"
 #include "ImageManager.h"
 
@@ -21,8 +22,7 @@ private:
 	std::vector<std::vector<Tile*>> map;
     
 	//Width and height of level (in tiles)
-	int w;
-	int h;
+	int w, h, tileSize;
     
 	void SetDimensions(int w, int h);
 	
@@ -33,10 +33,12 @@ public:
 	void AddTile(int x, int y, Tile* tile);
 	Tile* GetTile(unsigned int x, unsigned int y);
     
-	void LoadLevel(std::string filename, ImageManager& imageManager);
+    void LoadMap(std::string filename, ImageManager& imageManager);
+    void LoadTilesets(Tmx::Map* map, ImageManager& imageManager);
     
-	int GetWidth();
-	int GetHeight();
+	const int GetWidth() const {return w;}
+	const int GetHeight() const {return h;}
+    const int GetTileSize() const {return tileSize;}
 };
 
 #endif /* defined(__HeroMustSavePrincess__Level__) */

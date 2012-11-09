@@ -39,7 +39,7 @@ private:
 	void Update();
     
 public:
-	Engine(int w, int h, int tSize);
+	Engine(int w, int h);
 	~Engine();
     
 	void Go();					//Starts the engine
