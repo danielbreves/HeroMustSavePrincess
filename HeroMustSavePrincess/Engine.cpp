@@ -9,11 +9,9 @@
 #include "Engine.h"
 #include "Animation.h"
 #include "ResourcePath.hpp"
+#include <math.h>
 
 #define SCREEN_BPP      32
-#define SPRITE_SPEED    2
-#define SPRITE_WIDTH    32
-#define SPRITE_HEIGHT   32
 #define FPS             25
 
 Engine::Engine(int w, int h)
@@ -41,17 +39,17 @@ bool Engine::Init()
 		return false;
     
     currentLevel = new Level;
-    currentLevel->LoadMap(resourcePath() + "tiled_test2.tmx", imageManager);
+    currentLevel->LoadMap(resourcePath() + "tiled_test3.tmx", imageManager);
 	
     tileSize = currentLevel->GetTileSize();
     
-    spriteManager = new SpriteManager(currentLevel, tileSize);
+    spriteManager = new SpriteManager(currentLevel);
     
     sf::Texture* hero = new sf::Texture;
     
     hero->loadFromFile(resourcePath() + "hero.png");
     
-    player = new Player(*hero, sf::Vector2i(videoSize.x/2, videoSize.y/2), SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED);
+    player = new Player(*hero, sf::Vector2i(videoSize.x/2,videoSize.y/2), 32, 32, 3);
     
 	return true;
 }
@@ -67,41 +65,30 @@ void Engine::ProcessInput()
 		}
 	}
     
-    sf::IntRect bounds = camera->GetTileBounds(tileSize);
-    
-    cout << "player->GetPosition().x: " << player->GetPosition().x << endl;
-    cout << "player->GetPosition().y: " << player->GetPosition().y << endl;
-    cout << "camera->GetPosition().x: " << camera->GetPosition().x << endl;
-    cout << "camera->GetPosition().y: " << camera->GetPosition().y << endl;
-    cout << "bounds.left: " << bounds.left << endl;
-    cout << "bounds.top: " << bounds.top << endl;
-    cout << "player x?: " << ((player->GetPosition().x + SPRITE_WIDTH + camera->GetTileOffset(tileSize).x + SPRITE_SPEED) / tileSize) << endl;
-    cout << "boundary x?: " << currentLevel->GetWidth() << endl;
-    
-        
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && player->GetPosition().x > -camera->GetPosition().x) {
-        player->Action(Player::WEST);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+        player->SetAction(Player::WEST);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) &&
-        (player->GetPosition().x + SPRITE_WIDTH + camera->GetTileOffset(tileSize).x + SPRITE_SPEED) / tileSize < currentLevel->GetWidth() - bounds.left) {
-        player->Action(Player::EAST);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+        player->SetAction(Player::EAST);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && player->GetPosition().y > -camera->GetPosition().y) {
-        player->Action(Player::NORTH);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        player->SetAction(Player::NORTH);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) &&
-        (player->GetPosition().y + SPRITE_HEIGHT + camera->GetTileOffset(tileSize).y + SPRITE_SPEED) / tileSize < currentLevel->GetHeight() - bounds.top) {
-        player->Action(Player::SOUTH);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        player->SetAction(Player::SOUTH);
+    }
+    else {
+        player->SetAction(Player::STAND);
     }
 }
 
 void Engine::Update()
 {
-    player->Update();
+    player->Update(currentLevel);
     player->CheckCollisions(spriteManager->GetSprites());
     camera->MoveCenter(player->GetPosition().x, player->GetPosition().y);
     camera->Update();
-    spriteManager->Update(camera, tileSize);
+    spriteManager->Update(camera, currentLevel);
 }
 
 void Engine::RenderFrame()
@@ -124,23 +111,51 @@ void Engine::RenderFrame()
 	//We're keeping track of two variables in each loop. How many tiles
 	//we've drawn (x and y), and which tile on the map we're drawing (tileX
 	//and tileY)
-	for(int y = 0, tileY = bounds.top; y < bounds.height; y++, tileY++)
-	{
-		for(int x = 0, tileX = bounds.left; x < bounds.width; x++, tileX++)
-		{
-			//Get the tile we're drawing
-			tile = currentLevel->GetTile(tileX, tileY);
-            
-            if (tile) tile->Draw((x * tileSize) - camOffsetX, (y * tileSize) - camOffsetY, window);
-		}
-	}
     
+    int layers = currentLevel->GetLayers();
+
+    for (int i = 0; i < layers; i++) {
+        for (int y = 0, tileY = bounds.top; y < bounds.height; y++, tileY++) {
+            for (int x = 0, tileX = bounds.left; x < bounds.width; x++, tileX++) {
+                //Get the tile we're drawing
+                tile = currentLevel->GetTile(i, tileX, tileY);
+                
+                if (tile) {
+                    tile->Draw((x * tileSize) - camOffsetX, (y * tileSize) - camOffsetY, window);
+                }
+            }
+        }
+    }
+
     spriteManager->Draw(window, camera);
     
-    player->Draw(window);
+    player->Draw(window, camera);
     
 	window->display();
 }
+
+//bool Engine::CheckCollision(sf::IntRect A, sf::IntRect B) {
+//    //Calculate the sides of rect A
+//    int leftA = A.left;
+//    int rightA = A.left + A.width;
+//    int topA = A.top;
+//    int bottomA = A.top + A.height;
+//    
+//    //Calculate the sides of rect B
+//    int leftB = B.left;
+//    int rightB = B.left + B.width;
+//    int topB = B.top;
+//    int bottomB = B.top + B.height;
+//    
+//    //If any of the sides from A are outside of B
+//    if (bottomA <= topB) return false;
+//    if (topA >= bottomB) return false;
+//    if (rightA <= leftB) return false;
+//    if (leftA >= rightB) return false;
+//    
+//    //If none of the sides from A are outside B
+//    return true;
+//}
 
 void Engine::MainLoop()
 {
@@ -154,7 +169,6 @@ void Engine::MainLoop()
             Update();
             timelastcall = clock.getElapsedTime().asMilliseconds();
         }
-        
         RenderFrame();
 	}
 }

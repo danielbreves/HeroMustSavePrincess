@@ -16,15 +16,8 @@ Player::~Player() {
     
 }
 
-void Player::Update() {
-    // check colisions
-    // update position
+void CheckCollision(sf::Sprite sprite) {
     
-    // if moving
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        animations[currAction]->Update();
-    }
 }
 
 void Player::CheckCollisions(vector<Sprite*>* sprites) {
@@ -56,19 +49,27 @@ void Player::CheckCollisions(vector<Sprite*>* sprites) {
                 int maxDiff = *max_element(diffs, diffs+4);
                 
                 if (diffTopBottom == maxDiff) {
-                    (*i)->Move(0,20);
                     (*i)->Hit();
+                    //(*i)->Move(0,20);
                 } else if (diffBottomTop == maxDiff) {
-                    (*i)->Move(0,-20);
                     (*i)->Hit();
+                    //(*i)->Move(0,-20);
                 } else if (diffRightLeft == maxDiff) {
-                    (*i)->Move(20,0);
                     (*i)->Hit();
+                    //(*i)->Move(20,0);
                 } else if (diffLeftRight == maxDiff) {
-                    (*i)->Move(-20,0);
                     (*i)->Hit();
+                    //(*i)->Move(-20,0);
                 }
             }
         }
     }
+}
+
+
+void Player::Update(Level* level) {
+    Move(level);
+    
+    // if moving
+    if (currAction != STAND) animations[currAction]->Update();
 }

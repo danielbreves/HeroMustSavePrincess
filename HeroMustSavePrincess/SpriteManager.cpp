@@ -16,21 +16,22 @@ using namespace std;
 #define SPRITE_WIDTH    32
 #define SPRITE_HEIGHT   32
 
-SpriteManager::SpriteManager(Level* level, int tileSize) {
+SpriteManager::SpriteManager(Level* level) {
     srand((unsigned int)time(0));
     sf::Vector2i position;
-    
     sf::Texture* badguy = new sf::Texture;
+    int levelHeight = level->GetHeight();
+    int tileSize = level->GetTileSize();
     
     badguy->loadFromFile(resourcePath() + "badguy.png");
     
-    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((level->GetHeight() * tileSize) - SPRITE_HEIGHT));
+    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((levelHeight * tileSize) - SPRITE_HEIGHT));
     sprites.push_back(new Sprite(*badguy, position, SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED));
 
-    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((level->GetHeight() * tileSize) - SPRITE_HEIGHT));
+    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((levelHeight * tileSize) - SPRITE_HEIGHT));
     sprites.push_back(new Sprite(*badguy, position, SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED));
     
-    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((level->GetHeight() * tileSize) - SPRITE_HEIGHT));
+    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((levelHeight * tileSize) - SPRITE_HEIGHT));
     sprites.push_back(new Sprite(*badguy, position, SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED));
 }
 
@@ -45,16 +46,16 @@ vector<Sprite*>* SpriteManager::GetSprites() {
     return &sprites;
 }
 
-void SpriteManager::Update(Camera* camera, int tileSize) {
+void SpriteManager::Update(Camera* camera, Level* level) {
     vector<Sprite*>::iterator i;
     for ( i = sprites.begin() ; i < sprites.end(); i++ ) {
-        (*i)->Update(camera, tileSize);
+        (*i)->Update(camera, level);
     }
 }
 
 void SpriteManager::Draw(sf::RenderWindow* rw, Camera* camera) {
     vector<Sprite*>::iterator i;
     for ( i = sprites.begin() ; i < sprites.end(); i++ ) {
-        (*i)->Draw(rw);
+        (*i)->Draw(rw, camera);
     }
 }

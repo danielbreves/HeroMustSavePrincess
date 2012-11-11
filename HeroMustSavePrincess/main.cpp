@@ -19,6 +19,8 @@ int main (int argc, const char * argv[])
         printf("%s", e);
         return EXIT_FAILURE;
 	}
+    
+    delete engine;
 
     return EXIT_SUCCESS;
 }

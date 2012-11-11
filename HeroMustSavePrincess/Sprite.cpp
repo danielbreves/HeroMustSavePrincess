@@ -8,9 +8,7 @@
 
 #include "Sprite.h"
 #include <time.h>
-
-#define SPRITE_WIDTH    32
-#define SPRITE_HEIGHT   32
+#include <math.h>
 
 std::auto_ptr<sf::Texture> Sprite::blood;
 
@@ -44,6 +42,11 @@ Sprite::~Sprite() {
 
 void Sprite::CreateAnimations(int rows) {
     sf::IntRect image = {0, 0, width, height};
+    
+    // Create animation STAND
+//    Animation *stand = new Animation;
+//    stand->AddFrame(image, 150);
+//    AddAnimation(STAND, stand);
     
     // Create animation SOUTH
     Animation *south = new Animation;
@@ -115,69 +118,116 @@ void Sprite::AddAnimation(ActionType action, Animation* animation) {
 
 void Sprite::Hit() {
     if (life == 1)
-        Action(Sprite::DIE);
+        SetAction(DIE);
     
     life--;
 }
 
-void Sprite::Move(int x, int y) {
-    position.x += x;
-    position.y += y;
-}
-
-void Sprite::Action(ActionType direction) {    
-    switch (direction) {
-        case NORTH:
-            position.y -= speed;
-            currAction = NORTH;
-            break;
-        case SOUTH:
-            position.y += speed;
-            currAction = SOUTH;
-            break;
-        case EAST:
-            position.x += speed;
-            currAction = EAST;
-            break;
-        case WEST:
-             position.x -= speed;
-            currAction = WEST;
-            break;
-        case DIE:
-            currAction = DIE;
-            break;
-            
-        default:
-            break;
-    }
-}
-
-void Sprite::Update(Camera* camera, int tileSize) {
-    // if camera is moving, move sprites in the opposite direction
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        position.x -= camera->GetPosition().x - lastCamPositionX;
-        position.y -= camera->GetPosition().y - lastCamPositionY;
-        lastCamPositionX = camera->GetPosition().x;
-        lastCamPositionY = camera->GetPosition().y;
-    }
+void Sprite::Move(Level* level) {   
+    int downY, upY, leftX, rightX;
+    Tile *upLeft, *downLeft, *upRight, *downRight;
+    sf::IntRect p = GetRect();
+    int tileSize = level->GetTileSize();
     
-    if (position.x > -SPRITE_WIDTH && position.x < camera->GetSize().x &&
-        position.y > -SPRITE_HEIGHT && position.y < camera->GetSize().y) {
+    if (currAction == WEST && position.x > 0) {
+        downY = floor((p.top + p.height - 1)/tileSize);
+        upY = floor((p.top)/tileSize);
+        leftX = floor((p.left - speed)/tileSize);
+        
+        upLeft = level->GetTile(1, leftX, upY);
+        downLeft = level->GetTile(1, leftX, downY);
+        
+        if (upLeft || downLeft) {
+            SetAction(STAND);
+            position.x = (leftX * tileSize) + p.width;
+        } else {
+            position.x -= speed;
+        }
+    }
+    else if (currAction == EAST && position.x + p.width < level->GetWidth() * tileSize) {
+        downY = floor((p.top + p.height - 1)/tileSize);
+        upY = floor((p.top)/tileSize);
+        rightX = floor((p.left + p.width + speed - 1)/tileSize);
+        
+        upRight = level->GetTile(1, rightX, upY);
+        downRight = level->GetTile(1, rightX, downY);
+        
+        if (upRight || downRight) {
+            SetAction(STAND);
+            position.x = (rightX * tileSize) - p.width;            
+        } else {
+            position.x += speed;
+        }
+    }
+    else if (currAction == NORTH && position.y > 0) {
+        upY = floor((p.top - speed)/tileSize);
+        leftX = floor(p.left/tileSize);
+        rightX = floor((p.left + p.width - 1)/tileSize);
+        
+        upLeft = level->GetTile(1, leftX, upY);
+        upRight = level->GetTile(1, rightX, upY);
+        
+        if (upLeft || upRight) {
+            SetAction(STAND);
+            position.y = (upY * tileSize) + p.height;
+        } else {
+            position.y -= speed;
+        }
+    }
+    else if (currAction == SOUTH && position.y + p.height < level->GetHeight() * tileSize) {
+        downY = floor((p.top + p.height + speed - 1)/tileSize);
+        leftX = floor(p.left/tileSize);
+        rightX = floor((p.left + p.width - 1)/tileSize);
+        
+        downLeft = level->GetTile(1, leftX, downY);
+        downRight = level->GetTile(1, rightX, downY);
+        
+        if (downLeft || downRight) {
+            SetAction(STAND);
+            position.y = (downY * tileSize) - p.height;
+        } else {
+            position.y += speed;
+        }
+    }
+}
+
+void Sprite::SetAction(ActionType action) {
+    if (currAction != STAND) prevAction = currAction;
+    currAction = action;
+}
+
+sf::IntRect Sprite::GetRect() {
+    return sf::IntRect(position.x,position.y,width,height);
+}
+
+void Sprite::Update(Camera* camera, Level* level) {
+    sf::Vector2i camPosition = camera->GetPosition();
+    sf::Vector2i camSize = camera->GetSize();
+    
+    if (position.x + width > camPosition.x && position.x < camPosition.x + camSize.x &&
+        position.y + height > camPosition.y && position.y < camPosition.y + camSize.y) {
         visible = true;
     } else {
         visible = false;
     }
     
-    if (visible && life) animations[currAction]->Update();
+    if (visible && life && currAction != STAND) animations[currAction]->Update();
 }
 
-void Sprite::Draw(sf::RenderWindow* rw) {
+void Sprite::Draw(sf::RenderWindow* rw, Camera* camera) {
+    ActionType animation;
+    
+    if (currAction == STAND) {
+        animation = prevAction;
+    } else {
+        animation = currAction;
+    }
+    
     if (visible) {
         if (life) {
-            animations[currAction]->Draw(rw, image, position);
+            animations[animation]->Draw(rw, image, position - camera->GetPosition());
         } else {
-            animations[currAction]->Draw(rw, &(*blood), position);
+            animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
         }
     }
 }

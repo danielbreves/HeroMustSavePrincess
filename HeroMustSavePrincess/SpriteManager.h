@@ -22,10 +22,10 @@ class SpriteManager {
 
     
 public:
-    SpriteManager(Level* level, int tileSize);
+    SpriteManager(Level* level);
     ~SpriteManager();
     vector<Sprite*>* GetSprites();
-    void Update(Camera* camera, int tileSize);
+    void Update(Camera* camera, Level* level);
     void Draw(sf::RenderWindow* rw, Camera* camera);
 };
 

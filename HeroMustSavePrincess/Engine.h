@@ -41,6 +41,7 @@ private:
 public:
 	Engine(int w, int h);
 	~Engine();
+    //bool CheckCollision(sf::IntRect A, sf::IntRect B);
     
 	void Go();					//Starts the engine
 };

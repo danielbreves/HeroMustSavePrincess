@@ -11,8 +11,6 @@
 #include <fstream>
 #include "ResourcePath.hpp"
 #include "ImageManager.h"
-#include "rapidxml.hpp"
-using namespace rapidxml;
 
 ImageManager::ImageManager()
 {
