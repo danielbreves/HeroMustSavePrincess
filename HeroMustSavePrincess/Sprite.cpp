@@ -12,7 +12,7 @@
 
 std::auto_ptr<sf::Texture> Sprite::blood;
 
-Sprite::Sprite(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) {
+Sprite::Sprite(sf::Texture &img, sf::Vector2i p, ActionType action, int w, int h, int speed) {
     image = &img;
 
     if (!blood.get()) {
@@ -26,7 +26,7 @@ Sprite::Sprite(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) {
     this->speed = speed;
     
     CreateAnimations(3);
-    currAction = SOUTH;
+    currAction = action;
 }
 
 Sprite::~Sprite() {
@@ -42,11 +42,6 @@ Sprite::~Sprite() {
 
 void Sprite::CreateAnimations(int rows) {
     sf::IntRect image = {0, 0, width, height};
-    
-    // Create animation STAND
-//    Animation *stand = new Animation;
-//    stand->AddFrame(image, 150);
-//    AddAnimation(STAND, stand);
     
     // Create animation SOUTH
     Animation *south = new Animation;
@@ -108,87 +103,90 @@ void Sprite::CreateAnimations(int rows) {
     AddAnimation(DIE, die);
 }
 
-void Sprite::SetTexture(sf::Texture &img) {
-    image = &img;
-}
-
 void Sprite::AddAnimation(ActionType action, Animation* animation) {
     animations[action] = animation;
 }
 
-void Sprite::Hit() {
-    if (life == 1)
-        SetAction(DIE);
+void Sprite::Hit(ActionType action, Level* level) {
+    int impact = 10;
+    
+    switch (action) {
+        case WEST: Move(level, -speed * impact, 0);
+            break;
+        case EAST: Move(level, speed * impact, 0);
+            break;
+        case NORTH: Move(level, 0, -speed * impact);
+            break;
+        case SOUTH: Move(level, 0, speed * impact);
+            break;
+            
+        default:
+            break;
+    }
+    
+    if (life == 1) SetAction(DIE);
     
     life--;
 }
 
-void Sprite::Move(Level* level) {   
+void Sprite::Move(Level* level, int x, int y) {
+    int tileSize = level->GetTileSize();
+    Corners tiles = DetectCollision(level, position.x + x, position.y + y);
+    
+    // WEST
+    if (x < 0 && position.x > 0) {
+        if (tiles.upLeft || tiles.downLeft) {
+            SetAction(EAST);
+            position.x = (tiles.leftX * tileSize) + width;
+        } else {
+            position.x += x;
+        }
+    }
+    // EAST
+    else if (x > 0 && position.x + width < level->GetWidth() * tileSize) {
+        if (tiles.upRight || tiles.downRight) {
+            SetAction(WEST);
+            position.x = (tiles.rightX * tileSize) - width;
+        } else {
+            position.x += x;
+        }
+    }
+    // NORTH
+    else if (y < 0 && position.y > 0) {
+        if (tiles.upLeft || tiles.upRight) {
+            SetAction(SOUTH);
+            position.y = (tiles.upY * tileSize) + height;
+        } else {
+            position.y += y;
+        }
+    }
+    // SOUTH
+    else if (y > 0 && position.y + height < level->GetHeight() * tileSize) {
+        if (tiles.downLeft || tiles.downRight) {
+            SetAction(NORTH);
+            position.y = (tiles.downY * tileSize) - height;
+        } else {
+            position.y += y;
+        }
+    }
+}
+
+Corners Sprite::DetectCollision(Level* level, int x, int y) {
     int downY, upY, leftX, rightX;
     Tile *upLeft, *downLeft, *upRight, *downRight;
-    sf::IntRect p = GetRect();
     int tileSize = level->GetTileSize();
     
-    if (currAction == WEST && position.x > 0) {
-        downY = floor((p.top + p.height - 1)/tileSize);
-        upY = floor((p.top)/tileSize);
-        leftX = floor((p.left - speed)/tileSize);
-        
-        upLeft = level->GetTile(1, leftX, upY);
-        downLeft = level->GetTile(1, leftX, downY);
-        
-        if (upLeft || downLeft) {
-            SetAction(STAND);
-            position.x = (leftX * tileSize) + p.width;
-        } else {
-            position.x -= speed;
-        }
-    }
-    else if (currAction == EAST && position.x + p.width < level->GetWidth() * tileSize) {
-        downY = floor((p.top + p.height - 1)/tileSize);
-        upY = floor((p.top)/tileSize);
-        rightX = floor((p.left + p.width + speed - 1)/tileSize);
-        
-        upRight = level->GetTile(1, rightX, upY);
-        downRight = level->GetTile(1, rightX, downY);
-        
-        if (upRight || downRight) {
-            SetAction(STAND);
-            position.x = (rightX * tileSize) - p.width;            
-        } else {
-            position.x += speed;
-        }
-    }
-    else if (currAction == NORTH && position.y > 0) {
-        upY = floor((p.top - speed)/tileSize);
-        leftX = floor(p.left/tileSize);
-        rightX = floor((p.left + p.width - 1)/tileSize);
-        
-        upLeft = level->GetTile(1, leftX, upY);
-        upRight = level->GetTile(1, rightX, upY);
-        
-        if (upLeft || upRight) {
-            SetAction(STAND);
-            position.y = (upY * tileSize) + p.height;
-        } else {
-            position.y -= speed;
-        }
-    }
-    else if (currAction == SOUTH && position.y + p.height < level->GetHeight() * tileSize) {
-        downY = floor((p.top + p.height + speed - 1)/tileSize);
-        leftX = floor(p.left/tileSize);
-        rightX = floor((p.left + p.width - 1)/tileSize);
-        
-        downLeft = level->GetTile(1, leftX, downY);
-        downRight = level->GetTile(1, rightX, downY);
-        
-        if (downLeft || downRight) {
-            SetAction(STAND);
-            position.y = (downY * tileSize) - p.height;
-        } else {
-            position.y += speed;
-        }
-    }
+    downY = floor((y + height - 1)/tileSize);
+    upY = floor(y/tileSize);
+    leftX = floor(x/tileSize);
+    rightX = floor((x + width - 1)/tileSize);
+    
+    upLeft = level->GetTile(1, leftX, upY);
+    downLeft = level->GetTile(1, leftX, downY);
+    upRight = level->GetTile(1, rightX, upY);
+    downRight = level->GetTile(1, rightX, downY);
+    
+    return {downY, upY, leftX, rightX, upLeft, downLeft, upRight, downRight};
 }
 
 void Sprite::SetAction(ActionType action) {
@@ -196,13 +194,25 @@ void Sprite::SetAction(ActionType action) {
     currAction = action;
 }
 
-sf::IntRect Sprite::GetRect() {
-    return sf::IntRect(position.x,position.y,width,height);
-}
-
 void Sprite::Update(Camera* camera, Level* level) {
     sf::Vector2i camPosition = camera->GetPosition();
     sf::Vector2i camSize = camera->GetSize();
+    
+    int speed = GetSpeed();
+    
+    switch (currAction) {
+        case WEST: Move(level, -speed, 0);
+            break;
+        case EAST: Move(level, speed, 0);
+            break;
+        case NORTH: Move(level, 0, -speed);
+            break;
+        case SOUTH: Move(level, 0, speed);
+            break;
+            
+        default:
+            break;
+    }
     
     if (position.x + width > camPosition.x && position.x < camPosition.x + camSize.x &&
         position.y + height > camPosition.y && position.y < camPosition.y + camSize.y) {

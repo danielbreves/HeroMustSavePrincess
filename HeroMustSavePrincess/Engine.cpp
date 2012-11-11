@@ -38,12 +38,10 @@ bool Engine::Init()
 	if(!window)
 		return false;
     
-    currentLevel = new Level;
-    currentLevel->LoadMap(resourcePath() + "tiled_test3.tmx", imageManager);
-	
-    tileSize = currentLevel->GetTileSize();
+    spriteManager = new SpriteManager;
     
-    spriteManager = new SpriteManager(currentLevel);
+    currentLevel = new Level;
+    currentLevel->LoadMap(resourcePath() + "tiled_test4.tmx", imageManager, spriteManager);
     
     sf::Texture* hero = new sf::Texture;
     
@@ -85,7 +83,7 @@ void Engine::ProcessInput()
 void Engine::Update()
 {
     player->Update(currentLevel);
-    player->CheckCollisions(spriteManager->GetSprites());
+    player->CheckCollisions(spriteManager->GetSprites(), currentLevel);
     camera->MoveCenter(player->GetPosition().x, player->GetPosition().y);
     camera->Update();
     spriteManager->Update(camera, currentLevel);
@@ -93,6 +91,8 @@ void Engine::Update()
 
 void Engine::RenderFrame()
 {
+    int tileSize = currentLevel->GetTileSize();
+    
 	//Camera offsets
 	int camOffsetX, camOffsetY;
     
@@ -133,29 +133,6 @@ void Engine::RenderFrame()
     
 	window->display();
 }
-
-//bool Engine::CheckCollision(sf::IntRect A, sf::IntRect B) {
-//    //Calculate the sides of rect A
-//    int leftA = A.left;
-//    int rightA = A.left + A.width;
-//    int topA = A.top;
-//    int bottomA = A.top + A.height;
-//    
-//    //Calculate the sides of rect B
-//    int leftB = B.left;
-//    int rightB = B.left + B.width;
-//    int topB = B.top;
-//    int bottomB = B.top + B.height;
-//    
-//    //If any of the sides from A are outside of B
-//    if (bottomA <= topB) return false;
-//    if (topA >= bottomB) return false;
-//    if (rightA <= leftB) return false;
-//    if (leftA >= rightB) return false;
-//    
-//    //If none of the sides from A are outside B
-//    return true;
-//}
 
 void Engine::MainLoop()
 {

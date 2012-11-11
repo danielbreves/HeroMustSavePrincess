@@ -24,7 +24,6 @@ private:
 	sf::RenderWindow* window;    
     ImageManager imageManager;
     sf::Vector2i videoSize;
-    int tileSize;
     SpriteManager* spriteManager;
     Player* player;
     Camera* camera;

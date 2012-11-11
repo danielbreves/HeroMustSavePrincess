@@ -7,7 +7,12 @@
 //
 
 #include "Level.h"
+#include "Sprite.h"
+#include "SpriteManager.h"
 #include "ResourcePath.hpp"
+
+#define SPRITE_WIDTH 32
+#define SPRITE_HEIGHT 32
 
 Level::Level()
 {
@@ -32,8 +37,8 @@ Level::~Level()
 
 void Level::SetDimensions(int layers, int w, int h)
 {
-    this->w = w;
-	this->h = h;
+    width = w;
+	height = h;
     
 	//w rows
 	map.resize(layers);
@@ -60,7 +65,7 @@ Tile* Level::GetTile(unsigned int layer, unsigned int x, unsigned int y)
     else return map[layer][x][y];
 }
 
-void Level::LoadMap(std::string filename, ImageManager& imageManager) {
+void Level::LoadMap(std::string filename, ImageManager& imageManager, SpriteManager* spriteManager) {
     Tmx::Map *map = new Tmx::Map();
 	map->ParseFile(filename);
     
@@ -72,6 +77,21 @@ void Level::LoadMap(std::string filename, ImageManager& imageManager) {
 	}
             
     LoadTilesets(map, imageManager);
+    
+    srand((unsigned int)time(0));
+    sf::Vector2i position;
+    sf::Texture* badguy = new sf::Texture;
+    
+    badguy->loadFromFile(resourcePath() + "badguy.png");
+    
+    position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
+    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4));
+    
+    position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
+    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4));
+    
+    position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
+    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4));
 }
 
 void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
@@ -107,20 +127,14 @@ void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
         
     for (int i = 0; i < layers; ++i) {
         const Tmx::Layer *layer = map->GetLayer(i);
-        
-        bool walkable = layer->GetProperties().GetNumericProperty("walkable");
-        
+                
         for (int y = 0; y < layer->GetHeight(); ++y) {
             for (int x = 0; x < layer->GetWidth(); ++x) {
                 //Get all the attributes
                 int id = layer->GetTileId(x, y);
                 
                 if (id) {
-                    if (!walkable) {
-                        printf("x: %d, y: %d, is not walkable\n", x, y);
-                    }
-                    
-                    Tile* newTile = new Tile(imageManager.GetImage(id), walkable);
+                    Tile* newTile = new Tile(imageManager.GetImage(id));
                     AddTile(i, x, y, newTile);
                 }
             }

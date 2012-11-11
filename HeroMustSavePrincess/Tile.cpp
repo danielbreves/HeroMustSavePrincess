@@ -8,9 +8,8 @@
 
 #include "Tile.h"
 
-Tile::Tile(sf::Texture& image, bool walkable) {
+Tile::Tile(sf::Texture& image) {
 	baseSprite.setTexture(image, true);
-    this->walkable = walkable;
 }
 
 Tile::~Tile() {

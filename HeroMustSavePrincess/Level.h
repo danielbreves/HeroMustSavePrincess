@@ -15,6 +15,8 @@
 #include "Tile.h"
 #include "ImageManager.h"
 
+class SpriteManager;
+
 class Level
 {
 private:
@@ -22,7 +24,7 @@ private:
 	std::vector<std::vector<std::vector<Tile*>>> map;
     
 	//Width and height of level (in tiles)
-	int w, h, tileSize;
+	int width, height, tileSize;
     
 	void SetDimensions(int layers, int w, int h);
 	
@@ -33,12 +35,12 @@ public:
 	void AddTile(int layer, int x, int y, Tile* tile);
 	Tile* GetTile(unsigned int layer, unsigned int x, unsigned int y);
     
-    void LoadMap(std::string filename, ImageManager& imageManager);
+    void LoadMap(std::string filename, ImageManager& imageManager, SpriteManager* spriteManager);
     void LoadTilesets(Tmx::Map* map, ImageManager& imageManager);
     
     const int GetLayers() const {return (int)map.size();}
-	const int GetWidth() const {return w;}
-	const int GetHeight() const {return h;}
+	const int GetWidth() const {return width;}
+	const int GetHeight() const {return height;}
     const int GetTileSize() const {return tileSize;}
 };
 

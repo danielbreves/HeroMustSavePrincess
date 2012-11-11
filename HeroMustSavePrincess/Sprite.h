@@ -18,6 +18,11 @@
 #include "ResourcePath.hpp"
 using namespace std;
 
+typedef struct {
+    int downY, upY, leftX, rightX;
+    Tile *upLeft, *downLeft, *upRight, *downRight;
+} Corners;
+
 class Sprite {
     static std::auto_ptr<sf::Texture> blood;
     int speed;
@@ -27,17 +32,17 @@ class Sprite {
 public:
     enum ActionType {STAND, NORTH, SOUTH, EAST, WEST, DIE};
     
-    Sprite(sf::Texture &img, sf::Vector2i p, int w, int h, int speed);
+    Sprite(sf::Texture &img, sf::Vector2i p, ActionType action, int w, int h, int speed);
     ~Sprite();
     void AddAnimation(ActionType action, Animation* animation);
     void CreateAnimations(int rows);
     void SetTexture(sf::Texture &img);
-    void Move(Level* level);
+    virtual void Move(Level* level, int x, int y);
+    Corners DetectCollision(Level* level, int x, int y);
     void SetAction(ActionType action);
-    void Hit();
+    void Hit(ActionType action, Level* level);
     void Update(Camera* camera, Level* level);
     virtual void Draw(sf::RenderWindow* rw, Camera* camera);
-    sf::IntRect GetRect();
     const sf::Vector2i GetPosition() const {return position;}
     const int GetHealth() const {return life;}
     const int GetWidth() const {return width;}

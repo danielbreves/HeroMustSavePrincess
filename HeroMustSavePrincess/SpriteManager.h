@@ -14,17 +14,19 @@
 #include "Animation.h"
 #include "Sprite.h"
 #include "Camera.h"
-#include "Level.h"
+//#include "Level.h"
 using namespace std;
+
+class Level;
 
 class SpriteManager {
     vector<Sprite*> sprites;
-
     
 public:
-    SpriteManager(Level* level);
+    SpriteManager();
     ~SpriteManager();
     vector<Sprite*>* GetSprites();
+    void AddSprite(Sprite* sprite);
     void Update(Camera* camera, Level* level);
     void Draw(sf::RenderWindow* rw, Camera* camera);
 };

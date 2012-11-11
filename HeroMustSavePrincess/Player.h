@@ -20,8 +20,8 @@ class Player : public Sprite {
 public:
     Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed);
     ~Player();
-    void CheckCollision(sf::Sprite sprite);
-    void CheckCollisions(vector<Sprite*>* sprites);
+    void Move(Level* level, int x, int y);
+    void CheckCollisions(vector<Sprite*>* sprites, Level* level);
     void Update(Level* level);
 };
 

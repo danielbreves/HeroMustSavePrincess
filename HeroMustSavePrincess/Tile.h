@@ -16,14 +16,12 @@ class Tile
 {
 private:
 	sf::Sprite baseSprite;
-    bool walkable;
     
 public:
-	Tile(sf::Texture& image, bool walkable);
+	Tile(sf::Texture& image);
 	~Tile();
     
     sf::IntRect GetRect();
-    const bool isWalkable() const {return walkable;}
 	void Draw(int x, int y, sf::RenderWindow* rw);
 };
 

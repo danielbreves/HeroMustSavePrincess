@@ -16,23 +16,8 @@ using namespace std;
 #define SPRITE_WIDTH    32
 #define SPRITE_HEIGHT   32
 
-SpriteManager::SpriteManager(Level* level) {
-    srand((unsigned int)time(0));
-    sf::Vector2i position;
-    sf::Texture* badguy = new sf::Texture;
-    int levelHeight = level->GetHeight();
-    int tileSize = level->GetTileSize();
-    
-    badguy->loadFromFile(resourcePath() + "badguy.png");
-    
-    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((levelHeight * tileSize) - SPRITE_HEIGHT));
-    sprites.push_back(new Sprite(*badguy, position, SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED));
+SpriteManager::SpriteManager() {
 
-    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((levelHeight * tileSize) - SPRITE_HEIGHT));
-    sprites.push_back(new Sprite(*badguy, position, SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED));
-    
-    position = sf::Vector2i(rand() % ((level->GetWidth() * tileSize) - SPRITE_WIDTH), rand() % ((levelHeight * tileSize) - SPRITE_HEIGHT));
-    sprites.push_back(new Sprite(*badguy, position, SPRITE_WIDTH, SPRITE_HEIGHT, SPRITE_SPEED));
 }
 
 SpriteManager::~SpriteManager() {
@@ -40,6 +25,10 @@ SpriteManager::~SpriteManager() {
     for ( i = sprites.begin() ; i < sprites.end(); i++ ) {
         delete (*i);
     }
+}
+
+void SpriteManager::AddSprite(Sprite* sprite) {
+    sprites.push_back(sprite);
 }
 
 vector<Sprite*>* SpriteManager::GetSprites() {

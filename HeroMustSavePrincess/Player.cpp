@@ -9,18 +9,14 @@
 #include "Player.h"
 #include <algorithm>
 
-Player::Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) : Sprite(img, p, w, h, speed) {
+Player::Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) : Sprite(img, p, SOUTH, w, h, speed) {
 }
 
 Player::~Player() {
     
 }
 
-void CheckCollision(sf::Sprite sprite) {
-    
-}
-
-void Player::CheckCollisions(vector<Sprite*>* sprites) {
+void Player::CheckCollisions(vector<Sprite*>* sprites, Level* level) {
     vector<Sprite*>::iterator i;
     for (i = sprites->begin(); i < sprites->end(); i++) {
         if ((*i)->IsVisible() && (*i)->GetHealth()) {
@@ -49,27 +45,79 @@ void Player::CheckCollisions(vector<Sprite*>* sprites) {
                 int maxDiff = *max_element(diffs, diffs+4);
                 
                 if (diffTopBottom == maxDiff) {
-                    (*i)->Hit();
-                    //(*i)->Move(0,20);
+                    (*i)->Hit(currAction, level);
                 } else if (diffBottomTop == maxDiff) {
-                    (*i)->Hit();
-                    //(*i)->Move(0,-20);
+                    (*i)->Hit(currAction, level);
                 } else if (diffRightLeft == maxDiff) {
-                    (*i)->Hit();
-                    //(*i)->Move(20,0);
+                    (*i)->Hit(currAction, level);
                 } else if (diffLeftRight == maxDiff) {
-                    (*i)->Hit();
-                    //(*i)->Move(-20,0);
+                    (*i)->Hit(currAction, level);
                 }
             }
         }
     }
 }
 
+void Player::Move(Level* level, int x, int y) {
+    int tileSize = level->GetTileSize();
+    Corners tiles = DetectCollision(level, position.x + x, position.y + y);
+    
+    // WEST
+    if (x < 0 && position.x > 0) {
+        if (tiles.upLeft || tiles.downLeft) {
+            SetAction(STAND);
+            position.x = (tiles.leftX * tileSize) + width;
+        } else {
+            position.x += x;
+        }
+    }
+    // EAST
+    else if (x > 0 && position.x + width < level->GetWidth() * tileSize) {
+        if (tiles.upRight || tiles.downRight) {
+            SetAction(STAND);
+            position.x = (tiles.rightX * tileSize) - width;
+        } else {
+            position.x += x;
+        }
+    }
+    // NORTH
+    else if (y < 0 && position.y > 0) {
+        if (tiles.upLeft || tiles.upRight) {
+            SetAction(STAND);
+            position.y = (tiles.upY * tileSize) + height;
+        } else {
+            position.y += y;
+        }
+    }
+    // SOUTH
+    else if (y > 0 && position.y + height < level->GetHeight() * tileSize) {
+        if (tiles.downLeft || tiles.downRight) {
+            SetAction(STAND);
+            position.y = (tiles.downY * tileSize) - height;
+        } else {
+            position.y += y;
+        }
+    }
+}
+
 
 void Player::Update(Level* level) {
-    Move(level);
+    int speed = GetSpeed();
     
+    switch (currAction) {
+        case WEST: Move(level, -speed, 0);
+            break;
+        case EAST: Move(level, speed, 0);
+            break;
+        case NORTH: Move(level, 0, -speed);
+            break;
+        case SOUTH: Move(level, 0, speed);
+            break;
+            
+        default:
+            break;
+    }
+        
     // if moving
     if (currAction != STAND) animations[currAction]->Update();
 }
