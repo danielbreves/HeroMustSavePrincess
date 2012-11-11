@@ -8,15 +8,15 @@
 
 #include "Engine.h"
 #include "Animation.h"
+#include "MenuState.h"
 #include "ResourcePath.hpp"
 #include <math.h>
 
 #define SCREEN_BPP      32
 #define FPS             25
 
-Engine::Engine(int w, int h)
-{
-    videoSize = sf::Vector2i(w, h);
+Engine::Engine()
+{    
 }
 
 Engine::~Engine()
@@ -25,18 +25,13 @@ Engine::~Engine()
     delete spriteManager;
     delete currentLevel;
     delete camera;
-    delete window;
 }
 
-bool Engine::Init()
+void Engine::Init(StateManager* manager)
 {
-	window = new sf::RenderWindow(sf::VideoMode(videoSize.x, videoSize.y, SCREEN_BPP), "Hero Must Save Princess");
+    videoSize = (sf::Vector2i)manager->GetWindow()->getSize();
+    
     camera = new Camera(videoSize.x,videoSize.y, 0.1f);
-    
-    mouseDown = false;
-    
-	if(!window)
-		return false;
     
     spriteManager = new SpriteManager;
     
@@ -45,23 +40,26 @@ bool Engine::Init()
     
     sf::Texture* hero = new sf::Texture;
     
-    hero->loadFromFile(resourcePath() + "hero.png");
+    hero->loadFromFile(resourcePath() + "hero_full.png");
     
     player = new Player(*hero, sf::Vector2i(videoSize.x/2,videoSize.y/2), 32, 32, 3);
-    
-	return true;
 }
 
-void Engine::ProcessInput()
+void Engine::HandleEvents(StateManager* manager)
 {
 	sf::Event evt;
 	//Loop through all window events
-	while(window->pollEvent(evt))
+	while(manager->GetWindow()->pollEvent(evt))
 	{
 		if(evt.type == sf::Event::Closed) {
-			window->close();
+			manager->GetWindow()->close();
+		}
+        if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Escape)) {
+			manager->ChangeState(new MenuState);
 		}
 	}
+    
+    player->SetAction(Player::STAND);
     
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         player->SetAction(Player::WEST);
@@ -75,21 +73,25 @@ void Engine::ProcessInput()
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
         player->SetAction(Player::SOUTH);
     }
-    else {
-        player->SetAction(Player::STAND);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        player->SetAction(Player::ATTACK);
     }
 }
 
-void Engine::Update()
+void Engine::Update(StateManager* manager)
 {
-    player->Update(currentLevel);
-    player->CheckCollisions(spriteManager->GetSprites(), currentLevel);
-    camera->MoveCenter(player->GetPosition().x, player->GetPosition().y);
-    camera->Update();
-    spriteManager->Update(camera, currentLevel);
+    if (!player->GetHealth()) {
+        manager->ChangeState(new MenuState);
+    } else {
+        player->Update(currentLevel);
+        player->CheckCollisions(spriteManager->GetSprites(), currentLevel);
+        camera->MoveCenter(player->GetPosition().x, player->GetPosition().y);
+        camera->Update();
+        spriteManager->Update(camera, currentLevel);
+    }
 }
 
-void Engine::RenderFrame()
+void Engine::Render(StateManager* manager)
 {
     int tileSize = currentLevel->GetTileSize();
     
@@ -98,8 +100,6 @@ void Engine::RenderFrame()
     
 	Tile* tile;
     
-	window->clear();
-	
 	//Get the tile bounds we need to draw and Camera bounds
 	sf::IntRect bounds = camera->GetTileBounds(tileSize);
     
@@ -107,13 +107,9 @@ void Engine::RenderFrame()
 	camOffsetX = camera->GetTileOffset(tileSize).x;
 	camOffsetY = camera->GetTileOffset(tileSize).y;
     
-	//Loop through and draw each tile
-	//We're keeping track of two variables in each loop. How many tiles
-	//we've drawn (x and y), and which tile on the map we're drawing (tileX
-	//and tileY)
-    
     int layers = currentLevel->GetLayers();
-
+    
+	//Loop through and draw each tile
     for (int i = 0; i < layers; i++) {
         for (int y = 0, tileY = bounds.top; y < bounds.height; y++, tileY++) {
             for (int x = 0, tileX = bounds.left; x < bounds.width; x++, tileX++) {
@@ -121,39 +117,13 @@ void Engine::RenderFrame()
                 tile = currentLevel->GetTile(i, tileX, tileY);
                 
                 if (tile) {
-                    tile->Draw((x * tileSize) - camOffsetX, (y * tileSize) - camOffsetY, window);
+                    tile->Draw((x * tileSize) - camOffsetX, (y * tileSize) - camOffsetY, manager->GetWindow());
                 }
             }
         }
     }
 
-    spriteManager->Draw(window, camera);
+    spriteManager->Draw(manager->GetWindow(), camera);
     
-    player->Draw(window, camera);
-    
-	window->display();
-}
-
-void Engine::MainLoop()
-{
-    sf::Int32 timelastcall = clock.getElapsedTime().asMilliseconds();
-    
-	//Loop until our window is closed
-	while(window->isOpen())
-	{
-        if (window->isOpen() && clock.getElapsedTime().asMilliseconds() - timelastcall > 1000/FPS) {
-            ProcessInput();
-            Update();
-            timelastcall = clock.getElapsedTime().asMilliseconds();
-        }
-        RenderFrame();
-	}
-}
-
-void Engine::Go()
-{
-	if(!Init())
-		throw "Could not initialize Engine";
-    
-	MainLoop();
+    player->Draw(manager->GetWindow(), camera);
 }

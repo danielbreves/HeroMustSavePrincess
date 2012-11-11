@@ -24,7 +24,7 @@ ImageManager::~ImageManager()
 
 void ImageManager::AddImage(sf::Texture& image, int id)
 {
-	imageList.push_back(image);
+	imageList[id] = image;
 }
 
 sf::Texture& ImageManager::GetImage(int id)

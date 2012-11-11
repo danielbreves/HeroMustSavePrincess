@@ -36,8 +36,6 @@ Sprite::~Sprite() {
         delete (*it).second;
     }
     animations.clear();
-    
-    delete image;
 }
 
 void Sprite::CreateAnimations(int rows) {
@@ -190,8 +188,17 @@ Corners Sprite::DetectCollision(Level* level, int x, int y) {
 }
 
 void Sprite::SetAction(ActionType action) {
-    if (currAction != STAND) prevAction = currAction;
-    currAction = action;
+    if (currAction != STAND) {
+        prevAction = currAction;
+    }
+    
+    if (action == ATTACK) {
+        attacking = true;
+    } else {
+        attacking = false;
+        currAction = action;
+    }
+    
 }
 
 void Sprite::Update(Camera* camera, Level* level) {

@@ -17,7 +17,7 @@ using namespace std;
 class ImageManager
 {
 private:
-	vector<sf::Texture> imageList;
+	map<int, sf::Texture> imageList;
         
 public:
 	ImageManager();

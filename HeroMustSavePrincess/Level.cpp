@@ -85,13 +85,13 @@ void Level::LoadMap(std::string filename, ImageManager& imageManager, SpriteMana
     badguy->loadFromFile(resourcePath() + "badguy.png");
     
     position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
-    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4));
+    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4 + 1));
     
     position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
-    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4));
+    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4 + 1));
     
     position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
-    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4));
+    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4 + 1));
 }
 
 void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
@@ -109,7 +109,7 @@ void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
         int rows = tileset->GetImage()->GetWidth() / tileSize;
         int cols = tileset->GetImage()->GetHeight() / tileSize;
         
-        for (int y = 0, i = 1; y < cols; ++y) {
+        for (int y = 0, i = 0; y < cols; ++y) {
             for (int x = 0; x < rows; ++i, ++x) {
                 //Copy the right tile image from tileset
                 sf::Texture tileImage;

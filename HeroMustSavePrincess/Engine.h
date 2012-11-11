@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "GameState.h"
 #include "ImageManager.h"
 #include "SpriteManager.h"
 #include "Camera.h"
@@ -18,31 +19,26 @@
 #include "Tile.h"
 #include "Player.h"
 
-class Engine
-{
-private:
-	sf::RenderWindow* window;    
+class Engine : public GameState {
+	//sf::RenderWindow* window;
     ImageManager imageManager;
     sf::Vector2i videoSize;
     SpriteManager* spriteManager;
     Player* player;
     Camera* camera;
     Level* currentLevel;
-    bool mouseDown;
     sf::Clock clock;
     
-	bool Init();
-	void MainLoop();
-	void RenderFrame();
-	void ProcessInput();
-	void Update();
-    
 public:
-	Engine(int w, int h);
+	Engine();
 	~Engine();
-    //bool CheckCollision(sf::IntRect A, sf::IntRect B);
     
-	void Go();					//Starts the engine
+    //void Run();					//Starts the engine
+	void Init(StateManager* manager);
+	//void MainLoop();
+    void HandleEvents(StateManager* manager);
+	void Update(StateManager* manager);
+    void Render(StateManager* manager);
 };
 
 #endif /* defined(__HeroMustSavePrincess__Engine__) */

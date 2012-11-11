@@ -14,8 +14,8 @@
 #include "Sprite.h"
 
 class Player : public Sprite {
+    sf::Texture attack;
     int speed;
-    int life = 5;
     
 public:
     Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed);
@@ -23,6 +23,7 @@ public:
     void Move(Level* level, int x, int y);
     void CheckCollisions(vector<Sprite*>* sprites, Level* level);
     void Update(Level* level);
+    void Draw(sf::RenderWindow* rw, Camera* camera);
 };
 
 #endif /* defined(__HeroMustSavePrincess__Player__) */

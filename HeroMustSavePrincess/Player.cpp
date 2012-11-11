@@ -10,6 +10,60 @@
 #include <algorithm>
 
 Player::Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) : Sprite(img, p, SOUTH, w, h, speed) {
+    life = 5;
+    
+    sf::IntRect image = {0, 128, width, height};
+    int rows = 3;
+    
+    // Create animation ATTACK_SOUTH
+    Animation *south = new Animation;
+    image.left = 0;
+    
+    for (int i = 0; i < rows; i++) {
+        south->AddFrame(image, 150);
+        image.left += width;
+    }
+    
+    AddAnimation(ATTACK_SOUTH, south);
+    
+    image.top += height;
+    
+    // Create animation ATTACK_WEST
+    Animation *west = new Animation;
+    image.left = 0;
+    
+    for (int i = 0; i < rows; i++) {
+        west->AddFrame(image, 150);
+        image.left += width;
+    }
+    
+    AddAnimation(ATTACK_WEST, west);
+    
+    image.top += height;
+    
+    // Create animation ATTACK_EAST
+    Animation *east = new Animation;
+    image.left = 0;
+    
+    for (int i = 0; i < rows; i++) {
+        east->AddFrame(image, 150);
+        image.left += width;
+    }
+    
+    AddAnimation(ATTACK_EAST, east);
+    
+    image.top += height;
+    
+    // Create animation ATTACK_NORTH
+    Animation *north = new Animation;
+    image.left = 0;
+    
+    for (int i = 0; i < rows; i++) {
+        north->AddFrame(image, 150);
+        image.left += width;
+    }
+    
+    AddAnimation(ATTACK_NORTH, north);
 }
 
 Player::~Player() {
@@ -36,22 +90,19 @@ void Player::CheckCollisions(vector<Sprite*>* sprites, Level* level) {
             bottomEnemy = (*i)->GetPosition().y + (*i)->GetHeight();
             
             if (bottomEnemy > topPlayer && topEnemy < bottomPlayer && rightEnemy > leftPlayer && leftEnemy < rightPlayer) {
-                int diffTopBottom = bottomEnemy - topPlayer;
-                int diffBottomTop = bottomPlayer - topEnemy;
-                int diffRightLeft = rightEnemy - leftPlayer;
-                int diffLeftRight = rightPlayer - leftEnemy;
+                ActionType hitAction;
                 
-                int diffs[] = {diffTopBottom,diffBottomTop,diffRightLeft,diffLeftRight};
-                int maxDiff = *max_element(diffs, diffs+4);
+                if (currAction == STAND) {
+                    hitAction = prevAction;
+                } else {
+                    hitAction = currAction;
+                }
                 
-                if (diffTopBottom == maxDiff) {
-                    (*i)->Hit(currAction, level);
-                } else if (diffBottomTop == maxDiff) {
-                    (*i)->Hit(currAction, level);
-                } else if (diffRightLeft == maxDiff) {
-                    (*i)->Hit(currAction, level);
-                } else if (diffLeftRight == maxDiff) {
-                    (*i)->Hit(currAction, level);
+                if (attacking) {
+                    (*i)->Hit(hitAction, level);
+                }
+                else {
+                    Hit((*i)->GetAction(), level);
                 }
             }
         }
@@ -117,7 +168,31 @@ void Player::Update(Level* level) {
         default:
             break;
     }
-        
+    
+    ActionType animation = currAction;
+    
+    if (life && attacking) animation = static_cast<Sprite::ActionType> ((int)animation + 5);
+    
     // if moving
-    if (currAction != STAND) animations[currAction]->Update();
+    if (currAction != STAND) animations[animation]->Update();
+}
+
+void Player::Draw(sf::RenderWindow* rw, Camera* camera) {
+    ActionType animation;
+    
+    if (currAction == STAND) {
+        animation = prevAction;
+    } else {
+        animation = currAction;
+    }
+    
+    if (life) {
+        if (attacking) {
+            animation = static_cast<Sprite::ActionType> ((int)animation + 5);
+        }
+    
+        animations[animation]->Draw(rw, image, position - camera->GetPosition());
+    } else {
+        animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
+    }
 }

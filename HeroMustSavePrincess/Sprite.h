@@ -24,13 +24,11 @@ typedef struct {
 } Corners;
 
 class Sprite {
-    static std::auto_ptr<sf::Texture> blood;
     int speed;
     bool visible = true;
-    int life = 3;
     
 public:
-    enum ActionType {STAND, NORTH, SOUTH, EAST, WEST, DIE};
+    enum ActionType {STAND, NORTH, SOUTH, EAST, WEST, ATTACK, ATTACK_NORTH, ATTACK_SOUTH, ATTACK_EAST, ATTACK_WEST, DIE};
     
     Sprite(sf::Texture &img, sf::Vector2i p, ActionType action, int w, int h, int speed);
     ~Sprite();
@@ -39,10 +37,11 @@ public:
     void SetTexture(sf::Texture &img);
     virtual void Move(Level* level, int x, int y);
     Corners DetectCollision(Level* level, int x, int y);
-    void SetAction(ActionType action);
     void Hit(ActionType action, Level* level);
     void Update(Camera* camera, Level* level);
     virtual void Draw(sf::RenderWindow* rw, Camera* camera);
+    void SetAction(ActionType action);
+    ActionType GetAction() {return currAction;}
     const sf::Vector2i GetPosition() const {return position;}
     const int GetHealth() const {return life;}
     const int GetWidth() const {return width;}
@@ -52,12 +51,14 @@ public:
     
 protected:
     map<ActionType, Animation*> animations;
+    static std::auto_ptr<sf::Texture> blood;
     int width, height;
     ActionType prevAction;
     ActionType currAction;
     sf::Texture* image;
     sf::Vector2i position;
-    int xVel = 0, yVel = 0;
+    bool attacking = false;
+    int life = 3;
 };
 
 #endif /* defined(__HeroMustSavePrincess__Sprite__) */
