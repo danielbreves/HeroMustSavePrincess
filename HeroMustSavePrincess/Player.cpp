@@ -7,13 +7,23 @@
 //
 
 #include "Player.h"
+#include "Princess.h"
+#include "ResourcePath.hpp"
 #include <algorithm>
+#include <typeinfo>
 
 Player::Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) : Sprite(img, p, SOUTH, w, h, speed) {
     life = 5;
     
+    no.loadFromFile(resourcePath() + "no.wav");
+    hit.loadFromFile(resourcePath() + "hit.wav");
+    kiss.loadFromFile(resourcePath() + "kiss.wav");
+    
+    CreateAnimations(3);
+}
+
+void Player::CreateAnimations(int rows) {
     sf::IntRect image = {0, 128, width, height};
-    int rows = 3;
     
     // Create animation ATTACK_SOUTH
     Animation *south = new Animation;
@@ -70,48 +80,38 @@ Player::~Player() {
     
 }
 
-void Player::CheckCollisions(vector<Sprite*>* sprites, Level* level) {
-    vector<Sprite*>::iterator i;
-    for (i = sprites->begin(); i < sprites->end(); i++) {
-        if ((*i)->IsVisible() && (*i)->GetHealth()) {
-            //The sides of the rectangles
-            int leftEnemy, leftPlayer, rightEnemy, rightPlayer, topEnemy, topPlayer, bottomEnemy, bottomPlayer;
-            
-            //Calculate the sides of rect Player
-            leftPlayer = GetPosition().x;
-            rightPlayer = GetPosition().x + width;
-            topPlayer = GetPosition().y;
-            bottomPlayer = GetPosition().y + height;
-            
-            //Calculate the sides of rect Enemy
-            leftEnemy = (*i)->GetPosition().x;
-            rightEnemy = (*i)->GetPosition().x + (*i)->GetWidth();
-            topEnemy = (*i)->GetPosition().y;
-            bottomEnemy = (*i)->GetPosition().y + (*i)->GetHeight();
-            
-            if (bottomEnemy > topPlayer && topEnemy < bottomPlayer && rightEnemy > leftPlayer && leftEnemy < rightPlayer) {
-                ActionType hitAction;
-                
-                if (currAction == STAND) {
-                    hitAction = prevAction;
-                } else {
-                    hitAction = currAction;
-                }
-                
-                if (attacking) {
-                    (*i)->Hit(hitAction, level);
-                }
-                else {
-                    Hit((*i)->GetAction(), level);
-                }
-            }
+void Player::HandleCollision(Sprite* sprite, Level* level) {
+    ActionType hitAction;
+    
+    if (currAction == STAND) {
+        hitAction = prevAction;
+    } else {
+        hitAction = currAction;
+    }
+    
+    if (attacking) {
+        if (dynamic_cast<Princess*>(sprite)) {
+            level->SetStatus(Level::LOST);
+        }
+        sound.setBuffer(hit);
+        sprite->Hit(hitAction, level);
+    }
+    else {
+        if (dynamic_cast<Princess*>(sprite)) {
+            sound.setBuffer(kiss);
+            level->SetStatus(Level::COMPLETE);
+        } else {
+            sound.setBuffer(no);
+            Hit(sprite->GetAction(), level);
         }
     }
+    
+    sound.play();
 }
 
 void Player::Move(Level* level, int x, int y) {
     int tileSize = level->GetTileSize();
-    Corners tiles = DetectCollision(level, position.x + x, position.y + y);
+    Corners tiles = GetTileCollisions(level, position.x + x, position.y + y);
     
     // WEST
     if (x < 0 && position.x > 0) {
@@ -152,7 +152,9 @@ void Player::Move(Level* level, int x, int y) {
 }
 
 
-void Player::Update(Level* level) {
+void Player::Update(const vector<Sprite*>* sprites, Level* level) {
+    CheckSpriteCollisions(sprites, level);
+    
     int speed = GetSpeed();
     
     switch (currAction) {

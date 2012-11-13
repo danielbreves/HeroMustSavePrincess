@@ -1,6 +1,6 @@
 //
 //  MenuState.cpp
-//  Spike6
+//  HeroMustSavePrincess
 //
 //  Created by Daniel Breves on 18/08/12.
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
@@ -9,8 +9,10 @@
 #include <SFML/Graphics.hpp>
 #include "ResourcePath.hpp"
 #include "StateManager.h"
+#include "GameMessageState.h"
 #include "GameState.h"
 #include "MenuState.h"
+#include "AboutState.h"
 #include "Engine.h"
 
 MenuState::MenuState() {
@@ -39,9 +41,6 @@ void MenuState::HandleEvents(StateManager* manager) {
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Escape)) {
 			manager->Quit();
 		}
-        if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Space)) {
-			manager->ChangeState(new Engine);
-		}
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Up)) {
 			if (selected != 0) {
                 selected--;
@@ -53,9 +52,14 @@ void MenuState::HandleEvents(StateManager* manager) {
             }
 		}
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Return)) {
+            sf::Vector2u windowSize = manager->GetWindow()->getSize();
+            
 			switch (selected) {
                 case 0:
-                    manager->ChangeState(new Engine);
+                    manager->ChangeState(new GameMessageState("Level 1", 60, new Engine(windowSize.x,windowSize.y)));
+                    break;
+                case 1:
+                    manager->ChangeState(new AboutState);
                     break;
                 case 2:
                     manager->Quit();
@@ -78,14 +82,14 @@ void MenuState::Render(StateManager* manager) {
     int optionSize = 24;
     int optionPadding = 15;
     
-    sf::Vector2f windowSize = (sf::Vector2f)manager->GetWindow()->getSize();
+    sf::Vector2u windowSize = manager->GetWindow()->getSize();
     
     sf::Font silkworm, bebasneue;
     
     // Load from a font file on disk
     if (!bebasneue.loadFromFile(resourcePath() + "bebasneue.ttf"))
     {
-        printf("Could not load ergob.ttf\n");
+        printf("Could not load bebasneue.ttf\n");
         manager->Quit();
     }
     

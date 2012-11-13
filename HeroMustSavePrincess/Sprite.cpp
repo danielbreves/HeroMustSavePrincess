@@ -22,7 +22,7 @@ Sprite::Sprite(sf::Texture &img, sf::Vector2i p, ActionType action, int w, int h
     
     width = w;
     height = h;
-    position = {p.x, p.y};
+    position = p;
     this->speed = speed;
     
     CreateAnimations(3);
@@ -127,9 +127,10 @@ void Sprite::Hit(ActionType action, Level* level) {
     life--;
 }
 
+// relative x and y
 void Sprite::Move(Level* level, int x, int y) {
     int tileSize = level->GetTileSize();
-    Corners tiles = DetectCollision(level, position.x + x, position.y + y);
+    Corners tiles = GetTileCollisions(level, position.x + x, position.y + y);
     
     // WEST
     if (x < 0 && position.x > 0) {
@@ -169,7 +170,8 @@ void Sprite::Move(Level* level, int x, int y) {
     }
 }
 
-Corners Sprite::DetectCollision(Level* level, int x, int y) {
+// absolute x and y
+Corners Sprite::GetTileCollisions(Level* level, int x, int y) {
     int downY, upY, leftX, rightX;
     Tile *upLeft, *downLeft, *upRight, *downRight;
     int tileSize = level->GetTileSize();
@@ -187,6 +189,36 @@ Corners Sprite::DetectCollision(Level* level, int x, int y) {
     return {downY, upY, leftX, rightX, upLeft, downLeft, upRight, downRight};
 }
 
+void Sprite::CheckSpriteCollisions(const vector<Sprite*>* sprites, Level* level) {
+    vector<Sprite*>::const_iterator i;
+    for (i = sprites->begin(); i < sprites->end(); i++) {
+        if ((*i) != this && (*i)->GetHealth()) {
+            int xdist = ((*i)->GetPosition().x + (*i)->GetWidth()/2 +1) - (position.x + width/2);
+            int ydist = ((*i)->GetPosition().y + (*i)->GetHeight()/2 +1) - (position.y + height/2);
+            
+            if (sqrt(xdist*xdist+ydist*ydist) < (*i)->GetWidth()/2 + width/2) {
+                HandleCollision(*i, level);
+            }
+        }
+    }
+}
+
+void Sprite::HandleCollision(Sprite* sprite, Level* level) {
+    switch (currAction) {
+        case NORTH: SetAction(SOUTH);
+            break;
+        case SOUTH: SetAction(NORTH);
+            break;
+        case EAST: SetAction(WEST);
+            break;
+        case WEST: SetAction(EAST);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 void Sprite::SetAction(ActionType action) {
     if (currAction != STAND) {
         prevAction = currAction;
@@ -201,7 +233,7 @@ void Sprite::SetAction(ActionType action) {
     
 }
 
-void Sprite::Update(Camera* camera, Level* level) {
+void Sprite::Update(Camera* camera, Level* level) {    
     sf::Vector2i camPosition = camera->GetPosition();
     sf::Vector2i camSize = camera->GetSize();
     

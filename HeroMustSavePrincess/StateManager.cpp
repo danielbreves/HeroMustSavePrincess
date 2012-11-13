@@ -1,6 +1,6 @@
 //
 //  StateManager.cpp
-//  Spike6
+//  HeroMustSavePrincess
 //
 //  Created by Daniel Breves on 18/08/12.
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
@@ -9,39 +9,39 @@
 #include "StateManager.h"
 #include "GameState.h"
 
-StateManager::StateManager(sf::RenderWindow* rw) {
+StateManager::StateManager(sf::RenderWindow* rw, GameState* start) {
     window = rw;
+    running = true;
+    prev = NULL;
+    current = start;
+    current->Init(this);
 }
 
 StateManager::~StateManager() {
-    delete state;
-}
-
-void StateManager::Init(GameState* start) {
-    running = true;
-    state = start;
-    state->Init(this);
+    delete prev;
+    delete current;
 }
 
 void StateManager::ChangeState(GameState* toState) {
-	if (state != toState) {
-        delete state;
-		state = toState;
-        state->Init(this);
+	if (toState != prev) {
+        delete prev;
 	}
+    
+    current = toState;
+    current->Init(this);
 }
 
 void StateManager::HandleEvents() {
-    state->HandleEvents(this);
+    current->HandleEvents(this);
 }
 
 void StateManager::Update() {
-    state->Update(this);
+    current->Update(this);
 }
 
 void StateManager::Render() {
     window->clear();
-    state->Render(this);
+    current->Render(this);
     window->display();
 }
 

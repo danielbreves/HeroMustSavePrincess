@@ -7,6 +7,8 @@
 //
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "ResourcePath.hpp"
 #include "StateManager.h"
 #include "GameState.h"
 #include "MenuState.h"
@@ -16,19 +18,7 @@
 #define SCREEN_BPP      32
 #define FPS             25
 
-int main (int argc, const char * argv[])
-{
-//	Engine* engine = new Engine(800, 600);
-//    
-//	try {
-//		engine->Go();
-//	} catch (char* e) {
-//        printf("%s", e);
-//        return EXIT_FAILURE;
-//	}
-//    
-//    delete engine;
-    
+int main (int argc, const char * argv[]) {
     sf::Clock clock;
     
     sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP), "Hero Must Save Princess", sf::Style::Titlebar | sf::Style::Close);
@@ -36,14 +26,20 @@ int main (int argc, const char * argv[])
     if(!window)
 		return EXIT_FAILURE;
     
-    StateManager manager(window);
+    // Load a music to play
+    sf::Music music;
+    if (!music.openFromFile(resourcePath() + "Midiman.ogg"))
+        return EXIT_FAILURE;
+    
+    // Play the music
+    music.play();
+    
     GameState *start = new MenuState();
     
-    manager.Init(start);
-    
+    StateManager manager(window, start);
+        
     sf::Int32 timelastcall = clock.getElapsedTime().asMilliseconds();
     
-	//Loop until our window is closed
 	while(window->isOpen() && manager.Running()) {
         if (clock.getElapsedTime().asMilliseconds() - timelastcall > 1000/FPS) {
             manager.HandleEvents();
@@ -52,6 +48,8 @@ int main (int argc, const char * argv[])
         }
         manager.Render();
 	}
+    
+    music.stop();
     
     delete window;
 

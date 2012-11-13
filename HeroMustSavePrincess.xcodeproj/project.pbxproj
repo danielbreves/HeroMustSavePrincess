@@ -15,6 +15,21 @@
 		12017D06164FB5F300BCDE50 /* hero.png in Resources */ = {isa = PBXBuildFile; fileRef = 12017D05164FB5F200BCDE50 /* hero.png */; };
 		12017D08164FBA1C00BCDE50 /* hero_attack.png in Resources */ = {isa = PBXBuildFile; fileRef = 12017D07164FBA1C00BCDE50 /* hero_attack.png */; };
 		12017D0A164FBC7F00BCDE50 /* hero_full.png in Resources */ = {isa = PBXBuildFile; fileRef = 12017D09164FBC7F00BCDE50 /* hero_full.png */; };
+		12017D0D1650A86900BCDE50 /* GameMessageState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12017D0B1650A86800BCDE50 /* GameMessageState.cpp */; };
+		12017D101650AEA300BCDE50 /* AboutState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12017D0E1650AEA200BCDE50 /* AboutState.cpp */; };
+		12017D121650B03600BCDE50 /* helvetica_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12017D111650B03600BCDE50 /* helvetica_bold.ttf */; };
+		12017D141650B14200BCDE50 /* helvetica_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12017D131650B14200BCDE50 /* helvetica_regular.ttf */; };
+		12017D161650B46700BCDE50 /* arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12017D151650B46700BCDE50 /* arial.ttf */; };
+		12017D181650B98100BCDE50 /* tiled_test5.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 12017D171650B98100BCDE50 /* tiled_test5.tmx */; };
+		12017D1A1650C4F200BCDE50 /* princess.png in Resources */ = {isa = PBXBuildFile; fileRef = 12017D191650C4F200BCDE50 /* princess.png */; };
+		12017D1D1650C5D500BCDE50 /* Princess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12017D1B1650C5D300BCDE50 /* Princess.cpp */; };
+		12017D211650D95300BCDE50 /* tiled_test6.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 12017D201650D95200BCDE50 /* tiled_test6.tmx */; };
+		12017D261650F41200BCDE50 /* level_momo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 12017D241650F40F00BCDE50 /* level_momo.jpg */; };
+		12017D271650F41200BCDE50 /* level_momo.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 12017D251650F41000BCDE50 /* level_momo.tmx */; };
+		12017D2F1651196E00BCDE50 /* Midiman.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 12017D2E1651196E00BCDE50 /* Midiman.mp3 */; };
+		12017D3116511F0100BCDE50 /* Midiman.ogg in Resources */ = {isa = PBXBuildFile; fileRef = 12017D3016511F0100BCDE50 /* Midiman.ogg */; };
+		12017D34165122F800BCDE50 /* hit.wav in Resources */ = {isa = PBXBuildFile; fileRef = 12017D32165122F700BCDE50 /* hit.wav */; };
+		12017D391651B43E00BCDE50 /* kiss.wav in Resources */ = {isa = PBXBuildFile; fileRef = 12017D381651B43E00BCDE50 /* kiss.wav */; };
 		121B3530164BC58300E85D3A /* badguy.png in Resources */ = {isa = PBXBuildFile; fileRef = 121B352F164BC58200E85D3A /* badguy.png */; };
 		121B3544164C92D700E85D3A /* blood.png in Resources */ = {isa = PBXBuildFile; fileRef = 121B3543164C92D700E85D3A /* blood.png */; };
 		121B35E9164CE61300E85D3A /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 121B35AB164CE61300E85D3A /* base64.cpp */; };
@@ -51,6 +66,7 @@
 		121B3613164CE7DA00E85D3A /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 121B360F164CE7DA00E85D3A /* tinyxmlparser.cpp */; };
 		121B361B164CF5FA00E85D3A /* tiled_test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 121B361A164CF5F900E85D3A /* tiled_test.jpg */; };
 		1230DA62164B683C009155E9 /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1230DA60164B683C009155E9 /* Player.cpp */; };
+		1286AA3F1651FC7D00C39698 /* no.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1286AA3E1651FC7D00C39698 /* no.wav */; };
 		12BED398164F7E21001B2EF2 /* tiled_test4.tmx in Resources */ = {isa = PBXBuildFile; fileRef = 12BED397164F7E21001B2EF2 /* tiled_test4.tmx */; };
 		12C9C694164A383E00F1F2D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C9C693164A383E00F1F2D8 /* Foundation.framework */; };
 		12C9C697164A383E00F1F2D8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C696164A383E00F1F2D8 /* main.cpp */; };
@@ -78,6 +94,24 @@
 		12017D05164FB5F200BCDE50 /* hero.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hero.png; sourceTree = "<group>"; };
 		12017D07164FBA1C00BCDE50 /* hero_attack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hero_attack.png; sourceTree = "<group>"; };
 		12017D09164FBC7F00BCDE50 /* hero_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hero_full.png; sourceTree = "<group>"; };
+		12017D0B1650A86800BCDE50 /* GameMessageState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMessageState.cpp; sourceTree = "<group>"; };
+		12017D0C1650A86900BCDE50 /* GameMessageState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMessageState.h; sourceTree = "<group>"; };
+		12017D0E1650AEA200BCDE50 /* AboutState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutState.cpp; sourceTree = "<group>"; };
+		12017D0F1650AEA300BCDE50 /* AboutState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutState.h; sourceTree = "<group>"; };
+		12017D111650B03600BCDE50 /* helvetica_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = helvetica_bold.ttf; sourceTree = "<group>"; };
+		12017D131650B14200BCDE50 /* helvetica_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = helvetica_regular.ttf; sourceTree = "<group>"; };
+		12017D151650B46700BCDE50 /* arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = arial.ttf; sourceTree = "<group>"; };
+		12017D171650B98100BCDE50 /* tiled_test5.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiled_test5.tmx; sourceTree = "<group>"; };
+		12017D191650C4F200BCDE50 /* princess.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = princess.png; sourceTree = "<group>"; };
+		12017D1B1650C5D300BCDE50 /* Princess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Princess.cpp; sourceTree = "<group>"; };
+		12017D1C1650C5D400BCDE50 /* Princess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Princess.h; sourceTree = "<group>"; };
+		12017D201650D95200BCDE50 /* tiled_test6.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiled_test6.tmx; sourceTree = "<group>"; };
+		12017D241650F40F00BCDE50 /* level_momo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = level_momo.jpg; sourceTree = "<group>"; };
+		12017D251650F41000BCDE50 /* level_momo.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = level_momo.tmx; sourceTree = "<group>"; };
+		12017D2E1651196E00BCDE50 /* Midiman.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Midiman.mp3; sourceTree = "<group>"; };
+		12017D3016511F0100BCDE50 /* Midiman.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; path = Midiman.ogg; sourceTree = "<group>"; };
+		12017D32165122F700BCDE50 /* hit.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = hit.wav; sourceTree = "<group>"; };
+		12017D381651B43E00BCDE50 /* kiss.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = kiss.wav; sourceTree = "<group>"; };
 		121B352F164BC58200E85D3A /* badguy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = badguy.png; sourceTree = "<group>"; };
 		121B3543164C92D700E85D3A /* blood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blood.png; sourceTree = "<group>"; };
 		121B35AB164CE61300E85D3A /* base64.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = base64.cpp; sourceTree = "<group>"; };
@@ -143,6 +177,7 @@
 		121B361A164CF5F900E85D3A /* tiled_test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = tiled_test.jpg; sourceTree = "<group>"; };
 		1230DA60164B683C009155E9 /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		1230DA61164B683C009155E9 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		1286AA3E1651FC7D00C39698 /* no.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = no.wav; sourceTree = "<group>"; };
 		12BED397164F7E21001B2EF2 /* tiled_test4.tmx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = tiled_test4.tmx; sourceTree = "<group>"; };
 		12C9C68F164A383E00F1F2D8 /* HeroMustSavePrincess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeroMustSavePrincess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12C9C693164A383E00F1F2D8 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -301,12 +336,18 @@
 		12C9C695164A383E00F1F2D8 /* HeroMustSavePrincess */ = {
 			isa = PBXGroup;
 			children = (
-				12017CED164F8F5700BCDE50 /* GameState.h */,
 				12017CEE164F8F5700BCDE50 /* MenuState.cpp */,
 				12017CEF164F8F5700BCDE50 /* MenuState.h */,
+				12017D0E1650AEA200BCDE50 /* AboutState.cpp */,
+				12017D0F1650AEA300BCDE50 /* AboutState.h */,
+				12017D0B1650A86800BCDE50 /* GameMessageState.cpp */,
+				12017D0C1650A86900BCDE50 /* GameMessageState.h */,
+				12017CED164F8F5700BCDE50 /* GameState.h */,
 				12017CF2164F8F5700BCDE50 /* StateManager.cpp */,
 				12017CF3164F8F5700BCDE50 /* StateManager.h */,
 				12C9C696164A383E00F1F2D8 /* main.cpp */,
+				12017D1B1650C5D300BCDE50 /* Princess.cpp */,
+				12017D1C1650C5D400BCDE50 /* Princess.h */,
 				1230DA60164B683C009155E9 /* Player.cpp */,
 				1230DA61164B683C009155E9 /* Player.h */,
 				12C9C6DE164B515700F1F2D8 /* Animation.cpp */,
@@ -336,6 +377,19 @@
 		12C9C69B164A383E00F1F2D8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1286AA3E1651FC7D00C39698 /* no.wav */,
+				12017D381651B43E00BCDE50 /* kiss.wav */,
+				12017D32165122F700BCDE50 /* hit.wav */,
+				12017D3016511F0100BCDE50 /* Midiman.ogg */,
+				12017D2E1651196E00BCDE50 /* Midiman.mp3 */,
+				12017D241650F40F00BCDE50 /* level_momo.jpg */,
+				12017D251650F41000BCDE50 /* level_momo.tmx */,
+				12017D201650D95200BCDE50 /* tiled_test6.tmx */,
+				12017D191650C4F200BCDE50 /* princess.png */,
+				12017D171650B98100BCDE50 /* tiled_test5.tmx */,
+				12017D151650B46700BCDE50 /* arial.ttf */,
+				12017D131650B14200BCDE50 /* helvetica_regular.ttf */,
+				12017D111650B03600BCDE50 /* helvetica_bold.ttf */,
 				12017D09164FBC7F00BCDE50 /* hero_full.png */,
 				12017D07164FBA1C00BCDE50 /* hero_attack.png */,
 				12017D05164FB5F200BCDE50 /* hero.png */,
@@ -423,6 +477,19 @@
 				12017D06164FB5F300BCDE50 /* hero.png in Resources */,
 				12017D08164FBA1C00BCDE50 /* hero_attack.png in Resources */,
 				12017D0A164FBC7F00BCDE50 /* hero_full.png in Resources */,
+				12017D121650B03600BCDE50 /* helvetica_bold.ttf in Resources */,
+				12017D141650B14200BCDE50 /* helvetica_regular.ttf in Resources */,
+				12017D161650B46700BCDE50 /* arial.ttf in Resources */,
+				12017D181650B98100BCDE50 /* tiled_test5.tmx in Resources */,
+				12017D1A1650C4F200BCDE50 /* princess.png in Resources */,
+				12017D211650D95300BCDE50 /* tiled_test6.tmx in Resources */,
+				12017D261650F41200BCDE50 /* level_momo.jpg in Resources */,
+				12017D271650F41200BCDE50 /* level_momo.tmx in Resources */,
+				12017D2F1651196E00BCDE50 /* Midiman.mp3 in Resources */,
+				12017D3116511F0100BCDE50 /* Midiman.ogg in Resources */,
+				12017D34165122F800BCDE50 /* hit.wav in Resources */,
+				12017D391651B43E00BCDE50 /* kiss.wav in Resources */,
+				1286AA3F1651FC7D00C39698 /* no.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +560,9 @@
 				121B3613164CE7DA00E85D3A /* tinyxmlparser.cpp in Sources */,
 				12017CF4164F8F5700BCDE50 /* MenuState.cpp in Sources */,
 				12017CF6164F8F5700BCDE50 /* StateManager.cpp in Sources */,
+				12017D0D1650A86900BCDE50 /* GameMessageState.cpp in Sources */,
+				12017D101650AEA300BCDE50 /* AboutState.cpp in Sources */,
+				12017D1D1650C5D500BCDE50 /* Princess.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -559,7 +629,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SFML_AUDIO = "";
+				SFML_AUDIO = "-framework sfml-audio";
 				SFML_BINARY_TYPE = FRAMEWORKS;
 				SFML_GRAPHICS = "$(SFML_LINK_PREFIX)sfml-graphics$(SFML_LINK_SUFFIX)";
 				SFML_LINK_DYLIBS_PREFIX = "-l";
@@ -617,7 +687,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SFML_AUDIO = "";
+				SFML_AUDIO = "-framework sfml-audio";
 				SFML_BINARY_TYPE = FRAMEWORKS;
 				SFML_GRAPHICS = "$(SFML_LINK_PREFIX)sfml-graphics$(SFML_LINK_SUFFIX)";
 				SFML_LINK_DYLIBS_PREFIX = "-l";
@@ -641,6 +711,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "HeroMustSavePrincess/HeroMustSavePrincess-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -653,6 +727,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "HeroMustSavePrincess/HeroMustSavePrincess-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

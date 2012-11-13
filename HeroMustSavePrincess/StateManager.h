@@ -1,29 +1,28 @@
 //
 //  StateManager.h
-//  Spike6
+//  HeroMustSavePrincess
 //
 //  Created by Daniel Breves on 18/08/12.
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
 //
 
-#ifndef __Spike6__StateManager__
-#define __Spike6__StateManager__
+#ifndef __HeroMustSavePrincess__StateManager__
+#define __HeroMustSavePrincess__StateManager__
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
-class GameState;
+#include "GameState.h"
 
 class StateManager {
     bool running;
-    GameState* state;
+    GameState* prev;
+    GameState* current;
     sf::RenderWindow* window;
     
 public:
-    StateManager(sf::RenderWindow* rw);
+    StateManager(sf::RenderWindow* rw, GameState* start);
     ~StateManager();
     
-    void Init(GameState* start);
     void ChangeState(GameState* state);
     sf::RenderWindow* GetWindow() {return window;}
     void HandleEvents();
@@ -33,4 +32,4 @@ public:
     void Quit();
 };
 
-#endif /* defined(__Spike6__StateManager__) */
+#endif /* defined(__HeroMustSavePrincess__StateManager__) */

@@ -24,23 +24,29 @@ typedef struct {
 } Corners;
 
 class Sprite {
-    int speed;
-    bool visible = true;
     
 public:
     enum ActionType {STAND, NORTH, SOUTH, EAST, WEST, ATTACK, ATTACK_NORTH, ATTACK_SOUTH, ATTACK_EAST, ATTACK_WEST, DIE};
     
+    Sprite() {};
     Sprite(sf::Texture &img, sf::Vector2i p, ActionType action, int w, int h, int speed);
     ~Sprite();
+    
     void AddAnimation(ActionType action, Animation* animation);
-    void CreateAnimations(int rows);
-    void SetTexture(sf::Texture &img);
+    virtual void CreateAnimations(int rows);
+
     virtual void Move(Level* level, int x, int y);
-    Corners DetectCollision(Level* level, int x, int y);
-    void Hit(ActionType action, Level* level);
-    void Update(Camera* camera, Level* level);
+    Corners GetTileCollisions(Level* level, int x, int y);
+    void CheckSpriteCollisions(const vector<Sprite*>* sprites, Level* level);
+    virtual void HandleCollision(Sprite* sprite, Level* level);
+    virtual void Hit(ActionType action, Level* level);
+    
+    virtual void Update(Camera* camera, Level* level);
     virtual void Draw(sf::RenderWindow* rw, Camera* camera);
+    
+    void SetTexture(sf::Texture &img);
     void SetAction(ActionType action);
+    
     ActionType GetAction() {return currAction;}
     const sf::Vector2i GetPosition() const {return position;}
     const int GetHealth() const {return life;}
@@ -59,6 +65,8 @@ protected:
     sf::Vector2i position;
     bool attacking = false;
     int life = 3;
+    int speed;
+    bool visible = true;
 };
 
 #endif /* defined(__HeroMustSavePrincess__Sprite__) */

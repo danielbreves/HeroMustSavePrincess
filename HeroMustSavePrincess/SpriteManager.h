@@ -12,12 +12,13 @@
 #include <iostream>
 #include <vector>
 #include "Animation.h"
-#include "Sprite.h"
+//#include "Sprite.h"
 #include "Camera.h"
 //#include "Level.h"
 using namespace std;
 
 class Level;
+class Sprite;
 
 class SpriteManager {
     vector<Sprite*> sprites;
@@ -25,7 +26,8 @@ class SpriteManager {
 public:
     SpriteManager();
     ~SpriteManager();
-    vector<Sprite*>* GetSprites();
+    
+    const vector<Sprite*>* GetSprites() const;
     void AddSprite(Sprite* sprite);
     void Update(Camera* camera, Level* level);
     void Draw(sf::RenderWindow* rw, Camera* camera);

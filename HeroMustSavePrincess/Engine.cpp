@@ -9,46 +9,58 @@
 #include "Engine.h"
 #include "Animation.h"
 #include "MenuState.h"
+#include "GameMessageState.h"
+#include "StateManager.h"
 #include "ResourcePath.hpp"
+#include <sstream>
 #include <math.h>
 
-#define SCREEN_BPP      32
-#define FPS             25
-
 Engine::Engine()
-{    
+{
+    current = 0;
+}
+
+Engine::Engine(int width, int height) {
+    camera = Camera(sf::IntRect(0,0,width,height));
+    
+    CreateLevels();
 }
 
 Engine::~Engine()
-{
-    delete player;
-    delete spriteManager;
-    delete currentLevel;
-    delete camera;
+{    
+//    vector<Level*>::iterator i;
+//    for ( i = levels.begin() ; i < levels.end(); i++ ) {
+//        delete (*i);
+//    }
 }
 
 void Engine::Init(StateManager* manager)
 {
-    videoSize = (sf::Vector2i)manager->GetWindow()->getSize();
+    sf::Vector2i videoSize = (sf::Vector2i)manager->GetWindow()->getSize();
     
-    camera = new Camera(videoSize.x,videoSize.y, 0.1f);
+    levels[current].LoadMap();
     
-    spriteManager = new SpriteManager;
+    int tileSize = levels[current].GetTileSize();
     
-    currentLevel = new Level;
-    currentLevel->LoadMap(resourcePath() + "tiled_test4.tmx", imageManager, spriteManager);
+    camera.Move((levels[current].GetWidth() * tileSize - videoSize.x)/2,(levels[current].GetHeight() * tileSize - videoSize.y)/2);
     
     sf::Texture* hero = new sf::Texture;
-    
     hero->loadFromFile(resourcePath() + "hero_full.png");
+    player = new Player(*hero, levels[current].GetPlayerPosition(), 32, 32, 3);
+}
+
+void Engine::CreateLevels() {
+    Level level0 = Level(resourcePath() + "tiled_test6.tmx");
+    levels.push_back(level0);
     
-    player = new Player(*hero, sf::Vector2i(videoSize.x/2,videoSize.y/2), 32, 32, 3);
+    Level level1 = Level(resourcePath() + "level_momo.tmx");
+    levels.push_back(level1);
 }
 
 void Engine::HandleEvents(StateManager* manager)
 {
 	sf::Event evt;
-	//Loop through all window events
+
 	while(manager->GetWindow()->pollEvent(evt))
 	{
 		if(evt.type == sf::Event::Closed) {
@@ -61,17 +73,17 @@ void Engine::HandleEvents(StateManager* manager)
     
     player->SetAction(Player::STAND);
     
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+        player->SetAction(Player::NORTH);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+        player->SetAction(Player::SOUTH);
+    }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
         player->SetAction(Player::WEST);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
         player->SetAction(Player::EAST);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        player->SetAction(Player::NORTH);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        player->SetAction(Player::SOUTH);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         player->SetAction(Player::ATTACK);
@@ -80,50 +92,32 @@ void Engine::HandleEvents(StateManager* manager)
 
 void Engine::Update(StateManager* manager)
 {
-    if (!player->GetHealth()) {
-        manager->ChangeState(new MenuState);
-    } else {
-        player->Update(currentLevel);
-        player->CheckCollisions(spriteManager->GetSprites(), currentLevel);
-        camera->MoveCenter(player->GetPosition().x, player->GetPosition().y);
-        camera->Update();
-        spriteManager->Update(camera, currentLevel);
+    if (!player->GetHealth() || levels[current].GetStatus() == Level::LOST) {
+        sf::sleep(sf::seconds(1.2f));
+        manager->ChangeState(new GameMessageState("Game Over", 60, new MenuState));
+    }
+    else if (levels[current].GetStatus() == Level::COMPLETE) {
+        if (current == levels.size() - 1) {
+            sf::sleep(sf::seconds(1.2f));
+            manager->ChangeState(new GameMessageState("You won!", 60, new MenuState));
+        } else {
+            ++current;
+            std::stringstream ss;
+            ss << "Level " << current + 1;
+            sf::sleep(sf::seconds(1.0f));
+            manager->ChangeState(new GameMessageState(ss.str(), 60, this));
+        }
+    }
+    else {
+        player->Update(levels[current].GetSprites(), &levels[current]);
+        camera.MoveCenter(&levels[current], player->GetPosition().x, player->GetPosition().y);
+        levels[current].Update(&camera);
     }
 }
 
 void Engine::Render(StateManager* manager)
 {
-    int tileSize = currentLevel->GetTileSize();
+    levels[current].Draw(manager->GetWindow(), &camera);
     
-	//Camera offsets
-	int camOffsetX, camOffsetY;
-    
-	Tile* tile;
-    
-	//Get the tile bounds we need to draw and Camera bounds
-	sf::IntRect bounds = camera->GetTileBounds(tileSize);
-    
-	//Figure out how much to offset each tile
-	camOffsetX = camera->GetTileOffset(tileSize).x;
-	camOffsetY = camera->GetTileOffset(tileSize).y;
-    
-    int layers = currentLevel->GetLayers();
-    
-	//Loop through and draw each tile
-    for (int i = 0; i < layers; i++) {
-        for (int y = 0, tileY = bounds.top; y < bounds.height; y++, tileY++) {
-            for (int x = 0, tileX = bounds.left; x < bounds.width; x++, tileX++) {
-                //Get the tile we're drawing
-                tile = currentLevel->GetTile(i, tileX, tileY);
-                
-                if (tile) {
-                    tile->Draw((x * tileSize) - camOffsetX, (y * tileSize) - camOffsetY, manager->GetWindow());
-                }
-            }
-        }
-    }
-
-    spriteManager->Draw(manager->GetWindow(), camera);
-    
-    player->Draw(manager->GetWindow(), camera);
+    player->Draw(manager->GetWindow(), &camera);
 }

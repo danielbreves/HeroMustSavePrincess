@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "GameState.h"
 #include "ImageManager.h"
 #include "SpriteManager.h"
@@ -20,22 +21,18 @@
 #include "Player.h"
 
 class Engine : public GameState {
-	//sf::RenderWindow* window;
-    ImageManager imageManager;
-    sf::Vector2i videoSize;
-    SpriteManager* spriteManager;
-    Player* player;
-    Camera* camera;
-    Level* currentLevel;
-    sf::Clock clock;
+    Player *player;
+    Camera camera;
+    std::vector<Level> levels;
+    int current = 0;
     
 public:
 	Engine();
+    Engine(int width, int height);
 	~Engine();
     
-    //void Run();					//Starts the engine
 	void Init(StateManager* manager);
-	//void MainLoop();
+    void CreateLevels();
     void HandleEvents(StateManager* manager);
 	void Update(StateManager* manager);
     void Render(StateManager* manager);

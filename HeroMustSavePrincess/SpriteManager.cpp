@@ -8,13 +8,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <time.h>
+#include "Sprite.h"
 #include "SpriteManager.h"
+#include "Level.h"
 #include "ResourcePath.hpp"
 using namespace std;
-
-#define SPRITE_SPEED    2
-#define SPRITE_WIDTH    32
-#define SPRITE_HEIGHT   32
 
 SpriteManager::SpriteManager() {
 
@@ -31,13 +29,14 @@ void SpriteManager::AddSprite(Sprite* sprite) {
     sprites.push_back(sprite);
 }
 
-vector<Sprite*>* SpriteManager::GetSprites() {
+const vector<Sprite*>* SpriteManager::GetSprites() const {
     return &sprites;
 }
 
 void SpriteManager::Update(Camera* camera, Level* level) {
     vector<Sprite*>::iterator i;
     for ( i = sprites.begin() ; i < sprites.end(); i++ ) {
+        (*i)->CheckSpriteCollisions(&sprites, level);
         (*i)->Update(camera, level);
     }
 }

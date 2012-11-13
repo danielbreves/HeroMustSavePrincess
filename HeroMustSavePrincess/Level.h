@@ -12,36 +12,58 @@
 #include <iostream>
 #include <vector>
 #include "../TmxParser/Tmx.h"
-#include "Tile.h"
+#include "SpriteManager.h"
 #include "ImageManager.h"
+//#include "Sprite.h"
+#include "Camera.h"
+#include "Tile.h"
+using namespace std;
 
-class SpriteManager;
+class Sprite;
 
-class Level
-{
-private:
+class Level {
+    SpriteManager spriteManager;
+    ImageManager imageManager;
+    
 	//A 2D array of Tile pointers
-	std::vector<std::vector<std::vector<Tile*>>> map;
+	vector<vector<vector<Tile*>>> map;
+    
+    sf::Vector2i player;
+    
+    std::string filename;
     
 	//Width and height of level (in tiles)
 	int width, height, tileSize;
     
 	void SetDimensions(int layers, int w, int h);
-	
+    
 public:
-	Level();
+    enum Status {INCOMPLETE, COMPLETE, LOST};
+    
+	Level(string file);
 	~Level();
     
 	void AddTile(int layer, int x, int y, Tile* tile);
 	Tile* GetTile(unsigned int layer, unsigned int x, unsigned int y);
     
-    void LoadMap(std::string filename, ImageManager& imageManager, SpriteManager* spriteManager);
-    void LoadTilesets(Tmx::Map* map, ImageManager& imageManager);
+    void LoadMap();
+    void LoadTilesets(Tmx::Map* map);
+    void LoadObjects(Tmx::Map* map);
     
-    const int GetLayers() const {return (int)map.size();}
+    void SetStatus(Status s) {status = s;}
+    Status GetStatus() {return status;}
+    sf::Vector2i GetPlayerPosition() {return player;}
+    const vector<Sprite*>* GetSprites();
 	const int GetWidth() const {return width;}
 	const int GetHeight() const {return height;}
     const int GetTileSize() const {return tileSize;}
+    
+    void Update(Camera* camera);
+    void Draw(sf::RenderWindow* rw, Camera* camera);
+    
+protected:
+    Status status = INCOMPLETE;
+
 };
 
 #endif /* defined(__HeroMustSavePrincess__Level__) */

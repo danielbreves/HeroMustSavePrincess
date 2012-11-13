@@ -12,44 +12,29 @@
 #include <iostream>
 #include "Tile.h"
 
+class Level;
+
 class Camera
 {
 private:
-	//Absolute position of camera (number of
-	//pixels from origin of level map)
-	sf::Vector2f position;
-    
-	//Target position camera is moving towards
-	sf::Vector2f target;
-    
-	//Size of camera
-	sf::Vector2i size;
-    
-	//Speed of camera, a value between 0.0 and 1.0
-	float speed;
+	sf::IntRect video;
     
 public:
-	Camera(int w, int h, float speed);
+    Camera() {};
+	Camera(sf::IntRect video);
 	~Camera();
     
 	//Moves camera immediately to coordinates
 	void Move(int x, int y);
-	void MoveCenter(int x, int y);
+	void MoveCenter(Level* level, int x, int y);
     
-	//Sets camera target
-	void GoTo(int x, int y);
-	void GoToCenter(int x, int y);
+	sf::Vector2i GetPosition() { return sf::Vector2i(video.left, video.top); }
     
-	//Updates camera position
-	void Update();
-    
-	sf::Vector2i GetPosition() { return sf::Vector2i((int)position.x, (int)position.y); }
-    
-    sf::Vector2i GetSize() { return size; }
+    sf::Vector2i GetSize() { return sf::Vector2i(video.width, video.height); }
 	
 	//Helper function for retrieving camera's offset from
 	//nearest tile
-	sf::Vector2i GetTileOffset(int tileSize) { return sf::Vector2i((int)(position.x) % tileSize, (int)(position.y) % tileSize); }
+	sf::Vector2i GetTileOffset(int tileSize) { return sf::Vector2i(video.left % tileSize, video.top % tileSize); }
     
 	//Helper function for retrieving a rectangle defining
 	//which tiles are visible through camera

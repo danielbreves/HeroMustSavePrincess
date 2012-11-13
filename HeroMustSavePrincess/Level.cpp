@@ -7,6 +7,7 @@
 //
 
 #include "Level.h"
+#include "Princess.h"
 #include "Sprite.h"
 #include "SpriteManager.h"
 #include "ResourcePath.hpp"
@@ -14,9 +15,9 @@
 #define SPRITE_WIDTH 32
 #define SPRITE_HEIGHT 32
 
-Level::Level()
+Level::Level(std::string file)
 {
-    
+    filename = file;
 }
 
 Level::~Level()
@@ -65,7 +66,7 @@ Tile* Level::GetTile(unsigned int layer, unsigned int x, unsigned int y)
     else return map[layer][x][y];
 }
 
-void Level::LoadMap(std::string filename, ImageManager& imageManager, SpriteManager* spriteManager) {
+void Level::LoadMap() {
     Tmx::Map *map = new Tmx::Map();
 	map->ParseFile(filename);
     
@@ -76,25 +77,12 @@ void Level::LoadMap(std::string filename, ImageManager& imageManager, SpriteMana
 		exit(map->GetErrorCode());
 	}
             
-    LoadTilesets(map, imageManager);
+    LoadTilesets(map);
     
-    srand((unsigned int)time(0));
-    sf::Vector2i position;
-    sf::Texture* badguy = new sf::Texture;
-    
-    badguy->loadFromFile(resourcePath() + "badguy.png");
-    
-    position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
-    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4 + 1));
-    
-    position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
-    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4 + 1));
-    
-    position = sf::Vector2i(rand() % ((width * tileSize) - SPRITE_WIDTH), rand() % ((height * tileSize) - SPRITE_HEIGHT));
-    spriteManager->AddSprite(new Sprite(*badguy, position, static_cast<Sprite::ActionType>((rand() % 4)+1), SPRITE_WIDTH, SPRITE_HEIGHT, rand() % 4 + 1));
+    LoadObjects(map);
 }
 
-void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
+void Level::LoadTilesets(Tmx::Map* map) {
     sf::Image img;
     tileSize = map->GetTileWidth();
     
@@ -140,4 +128,82 @@ void Level::LoadTilesets(Tmx::Map* map, ImageManager& imageManager) {
             }
         }
     }
+}
+
+void Level::LoadObjects(Tmx::Map* map) {
+    // Iterate through all of the object groups.
+    sf::Texture* badguy = new sf::Texture;
+    badguy->loadFromFile(resourcePath() + "badguy.png");
+    
+    sf::Texture* princess = new sf::Texture;
+    princess->loadFromFile(resourcePath() + "princess.png");
+    
+	for (int i = 0; i < map->GetNumObjectGroups(); ++i) {
+		// Get an object group.
+		const Tmx::ObjectGroup *objectGroup = map->GetObjectGroup(i);
+        
+		// Iterate through all objects in the object group.
+		for (int j = 0; j < objectGroup->GetNumObjects(); ++j) {
+			// Get an object.
+			const Tmx::Object *object = objectGroup->GetObject(j);
+            
+            if (object->GetName() == "player") {
+                player = sf::Vector2i(object->GetX(), object->GetY());
+            }
+            else if (object->GetName() == "princess") {
+                sf::Vector2i position = sf::Vector2i(object->GetX(), object->GetY());
+                
+                spriteManager.AddSprite(new Princess(*princess, position, object->GetWidth(), object->GetHeight()));
+            }
+            else {
+                Tmx::PropertySet properties = object->GetProperties();
+                
+                int speed = properties.GetNumericProperty("speed");
+                Sprite::ActionType action = static_cast<Sprite::ActionType>(properties.GetNumericProperty("action"));
+                
+                sf::Vector2i position = sf::Vector2i(object->GetX(), object->GetY());
+                spriteManager.AddSprite(new Sprite(*badguy, position, action, object->GetWidth(), object->GetHeight(), speed));
+            }
+		}
+	}
+}
+
+const vector<Sprite*>* Level::GetSprites() {
+    return spriteManager.GetSprites();
+}
+
+void Level::Update(Camera* camera) {
+    spriteManager.Update(camera, this);
+}
+
+void Level::Draw(sf::RenderWindow* rw, Camera* camera) {    
+	//Camera offsets
+	int camOffsetX, camOffsetY;
+    
+	Tile* tile;
+    
+	//Get the tile bounds we need to draw and Camera bounds
+	sf::IntRect bounds = camera->GetTileBounds(tileSize);
+    
+	//Figure out how much to offset each tile
+	camOffsetX = camera->GetTileOffset(tileSize).x;
+	camOffsetY = camera->GetTileOffset(tileSize).y;
+    
+    int layers = (int)map.size();
+    
+	//Loop through and draw each tile
+    for (int i = 0; i < layers; i++) {
+        for (int y = 0, tileY = bounds.top; y < bounds.height; y++, tileY++) {
+            for (int x = 0, tileX = bounds.left; x < bounds.width; x++, tileX++) {
+                //Get the tile we're drawing
+                tile = GetTile(i, tileX, tileY);
+                
+                if (tile) {
+                    tile->Draw((x * tileSize) - camOffsetX, (y * tileSize) - camOffsetY, rw);
+                }
+            }
+        }
+    }
+    
+    spriteManager.Draw(rw, camera);
 }

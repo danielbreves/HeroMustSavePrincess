@@ -1,26 +1,19 @@
 //
 //  MenuState.h
-//  Spike6
+//  HeroMustSavePrincess
 //
 //  Created by Daniel Breves on 18/08/12.
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
 //
 
-#ifndef __Spike6__MenuState__
-#define __Spike6__MenuState__
+#ifndef __HeroMustSavePrincess__MenuState__
+#define __HeroMustSavePrincess__MenuState__
 
 #include <iostream>
 #include <vector>
 #include "GameState.h"
 
 class MenuState : public GameState {
-//    enum MenuOption {
-//        PLAY,
-//        ABOUT,
-//        EXIT,
-//        FIRST = PLAY,
-//        LAST = EXIT
-//    };
     std::vector<std::string> menuOptions;
     int selected;
     
@@ -35,4 +28,4 @@ public:
     void Render(StateManager* manager);
 };
 
-#endif /* defined(__Spike6__MenuState__) */
+#endif /* defined(__HeroMustSavePrincess__MenuState__) */
