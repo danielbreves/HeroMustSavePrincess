@@ -15,7 +15,7 @@
 #include "Sprite.h"
 
 class Player : public Sprite {
-    sf::Texture attack;
+    sf::Texture heart;
     int speed;
     sf::SoundBuffer no;
     sf::SoundBuffer hit;
@@ -24,7 +24,7 @@ class Player : public Sprite {
     
 public:
     Player() {};
-    Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed);
+    Player(sf::Texture &img, int w, int h, int speed);
     ~Player();
     void CreateAnimations(int rows);
     void Move(Level* level, int x, int y);

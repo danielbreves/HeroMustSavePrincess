@@ -10,7 +10,6 @@
 #include <SFML/Audio.hpp>
 #include "ResourcePath.hpp"
 #include "StateManager.h"
-#include "GameState.h"
 #include "MenuState.h"
 
 #define SCREEN_WIDTH    640
@@ -26,17 +25,13 @@ int main (int argc, const char * argv[]) {
     if(!window)
 		return EXIT_FAILURE;
     
-    // Load a music to play
     sf::Music music;
     if (!music.openFromFile(resourcePath() + "Midiman.ogg"))
         return EXIT_FAILURE;
     
-    // Play the music
     music.play();
-    
-    GameState *start = new MenuState();
-    
-    StateManager manager(window, start);
+        
+    StateManager manager(window, new MenuState());
         
     sf::Int32 timelastcall = clock.getElapsedTime().asMilliseconds();
     

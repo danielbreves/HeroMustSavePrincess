@@ -12,12 +12,13 @@
 #include <algorithm>
 #include <typeinfo>
 
-Player::Player(sf::Texture &img, sf::Vector2i p, int w, int h, int speed) : Sprite(img, p, SOUTH, w, h, speed) {
+Player::Player(sf::Texture &img, int w, int h, int speed) : Sprite(img, sf::Vector2i(0,0), SOUTH, w, h, speed) {
     life = 5;
     
     no.loadFromFile(resourcePath() + "no.wav");
     hit.loadFromFile(resourcePath() + "hit.wav");
     kiss.loadFromFile(resourcePath() + "kiss.wav");
+    heart.loadFromFile(resourcePath() + "heart.png");
     
     CreateAnimations(3);
 }
@@ -180,6 +181,7 @@ void Player::Update(const vector<Sprite*>* sprites, Level* level) {
 }
 
 void Player::Draw(sf::RenderWindow* rw, Camera* camera) {
+    sf::Sprite lifeImg = sf::Sprite(heart);
     ActionType animation;
     
     if (currAction == STAND) {
@@ -196,5 +198,10 @@ void Player::Draw(sf::RenderWindow* rw, Camera* camera) {
         animations[animation]->Draw(rw, image, position - camera->GetPosition());
     } else {
         animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
+    }
+    
+    for (int i = 1, x = 15; i <= life; i++, x += lifeImg.getGlobalBounds().width + 10) {
+        lifeImg.setPosition(x, 15);
+        rw->draw(lifeImg);
     }
 }

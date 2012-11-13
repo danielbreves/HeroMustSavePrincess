@@ -44,6 +44,7 @@ public:
     virtual void Update(Camera* camera, Level* level);
     virtual void Draw(sf::RenderWindow* rw, Camera* camera);
     
+    void SetPosition(sf::Vector2i p) {position = p;}
     void SetTexture(sf::Texture &img);
     void SetAction(ActionType action);
     

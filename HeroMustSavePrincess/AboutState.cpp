@@ -81,7 +81,7 @@ void AboutState::Render(StateManager* manager) {
     }
     
     sf::Text title("About", bebasneue, titleSize);
-    sf::Text about("Developed by Daniel Breves\n\xa9 2012 All Rights Reserved", arial, aboutSize);
+    sf::Text about("Find princess Manuella and save her from the\nterrible monsters that have imprisoned her.\nUse the ARROW KEYS to move around and\nhold SPACEBAR to defend yourself.\n\nDeveloped by Daniel Breves.\n\xa9 2012 All Rights Reserved", arial, aboutSize);
     sf::Text back("BACK", silkworm, backSize);
     
     title.setColor(sf::Color(255, 0, 0));

@@ -17,21 +17,21 @@
 
 Engine::Engine()
 {
-    current = 0;
 }
 
 Engine::Engine(int width, int height) {
     camera = Camera(sf::IntRect(0,0,width,height));
+    
+    sf::Texture* hero = new sf::Texture;
+    hero->loadFromFile(resourcePath() + "hero_full.png");
+    player = new Player(*hero, 32, 32, 3);
     
     CreateLevels();
 }
 
 Engine::~Engine()
 {    
-//    vector<Level*>::iterator i;
-//    for ( i = levels.begin() ; i < levels.end(); i++ ) {
-//        delete (*i);
-//    }
+    
 }
 
 void Engine::Init(StateManager* manager)
@@ -41,12 +41,12 @@ void Engine::Init(StateManager* manager)
     levels[current].LoadMap();
     
     int tileSize = levels[current].GetTileSize();
+    int centerX = (levels[current].GetWidth() * tileSize - videoSize.x)/2;
+    int centerY = (levels[current].GetHeight() * tileSize - videoSize.y)/2;
     
-    camera.Move((levels[current].GetWidth() * tileSize - videoSize.x)/2,(levels[current].GetHeight() * tileSize - videoSize.y)/2);
+    camera.Move(centerX, centerY);
     
-    sf::Texture* hero = new sf::Texture;
-    hero->loadFromFile(resourcePath() + "hero_full.png");
-    player = new Player(*hero, levels[current].GetPlayerPosition(), 32, 32, 3);
+    player->SetPosition(levels[current].GetPlayerPosition());
 }
 
 void Engine::CreateLevels() {
