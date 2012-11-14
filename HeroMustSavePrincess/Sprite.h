@@ -12,11 +12,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Animation.h"
-#include "ImageManager.h"
-#include "Level.h"
 #include "Camera.h"
 #include "ResourcePath.hpp"
 using namespace std;
+
+class Level;
 
 typedef struct {
     int downY, upY, leftX, rightX;
@@ -37,8 +37,7 @@ public:
 
     virtual void Move(Level* level, int x, int y);
     Corners GetTileCollisions(Level* level, int x, int y);
-    void CheckSpriteCollisions(const vector<Sprite*>* sprites, Level* level);
-    virtual void HandleCollision(Sprite* sprite, Level* level);
+    virtual void HandleCollision(Sprite* sprite);
     virtual void Hit(ActionType action, Level* level);
     
     virtual void Update(Camera* camera, Level* level);
@@ -58,7 +57,10 @@ public:
     
 protected:
     map<ActionType, Animation*> animations;
+    
+    // static auto pointer will create blood texture when first Sprite is created and delete itself when the last Sprite is deleted
     static std::auto_ptr<sf::Texture> blood;
+    
     int width, height;
     ActionType prevAction;
     ActionType currAction;

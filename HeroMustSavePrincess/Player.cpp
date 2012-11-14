@@ -6,6 +6,8 @@
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
 //
 
+#include "Sprite.h"
+#include "Level.h"
 #include "Player.h"
 #include "Princess.h"
 #include "ResourcePath.hpp"
@@ -13,7 +15,7 @@
 #include <typeinfo>
 
 Player::Player(sf::Texture &img, int w, int h, int speed) : Sprite(img, sf::Vector2i(0,0), SOUTH, w, h, speed) {
-    life = 5;
+    life = 4;
     
     no.loadFromFile(resourcePath() + "no.wav");
     hit.loadFromFile(resourcePath() + "hit.wav");
@@ -77,10 +79,6 @@ void Player::CreateAnimations(int rows) {
     AddAnimation(ATTACK_NORTH, north);
 }
 
-Player::~Player() {
-    
-}
-
 void Player::HandleCollision(Sprite* sprite, Level* level) {
     ActionType hitAction;
     
@@ -91,9 +89,6 @@ void Player::HandleCollision(Sprite* sprite, Level* level) {
     }
     
     if (attacking) {
-        if (dynamic_cast<Princess*>(sprite)) {
-            level->SetStatus(Level::LOST);
-        }
         sound.setBuffer(hit);
         sprite->Hit(hitAction, level);
     }
@@ -153,11 +148,7 @@ void Player::Move(Level* level, int x, int y) {
 }
 
 
-void Player::Update(const vector<Sprite*>* sprites, Level* level) {
-    CheckSpriteCollisions(sprites, level);
-    
-    int speed = GetSpeed();
-    
+void Player::Update(const vector<Sprite*>* sprites, Level* level) {        
     switch (currAction) {
         case WEST: Move(level, -speed, 0);
             break;
@@ -200,7 +191,7 @@ void Player::Draw(sf::RenderWindow* rw, Camera* camera) {
         animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
     }
     
-    for (int i = 1, x = 15; i <= life; i++, x += lifeImg.getGlobalBounds().width + 10) {
+    for (int i = 1, x = 15; i <= life; i++, x += lifeImg.getGlobalBounds().width + 5) {
         lifeImg.setPosition(x, 15);
         rw->draw(lifeImg);
     }

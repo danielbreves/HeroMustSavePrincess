@@ -9,7 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include "ResourcePath.hpp"
 #include "StateManager.h"
-#include "GameMessageState.h"
+#include "MessageState.h"
 #include "GameState.h"
 #include "MenuState.h"
 #include "AboutState.h"
@@ -56,7 +56,7 @@ void MenuState::HandleEvents(StateManager* manager) {
             
 			switch (selected) {
                 case 0:
-                    manager->ChangeState(new GameMessageState("Level 1", 60, new Engine(windowSize.x,windowSize.y)));
+                    manager->ChangeState(new MessageState("Level 1", 60, new Engine(windowSize.x,windowSize.y)));
                     break;
                 case 1:
                     manager->ChangeState(new AboutState);

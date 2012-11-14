@@ -8,20 +8,16 @@
 
 #include "Level.h"
 #include "Princess.h"
+#include "Player.h"
 #include "Sprite.h"
 #include "SpriteManager.h"
 #include "ResourcePath.hpp"
 
-#define SPRITE_WIDTH 32
-#define SPRITE_HEIGHT 32
-
-Level::Level(std::string file)
-{
+Level::Level(std::string file) {
     filename = file;
 }
 
-Level::~Level()
-{
+Level::~Level() {
     vector<vector<vector<Tile*>>>::iterator l;
     vector<vector<Tile*>>::iterator y;
     vector<Tile*>::iterator x;
@@ -53,13 +49,11 @@ void Level::SetDimensions(int layers, int w, int h)
     }
 }
 
-void Level::AddTile(int layer, int x, int y, Tile* tile)
-{
+void Level::AddTile(int layer, int x, int y, Tile* tile) {
 	map[layer][x][y] = tile;
 }
 
-Tile* Level::GetTile(unsigned int layer, unsigned int x, unsigned int y)
-{
+Tile* Level::GetTile(unsigned int layer, unsigned int x, unsigned int y) {
     if (layer >= map.capacity()) return 0;
     else if (x >= map[layer].capacity()) return 0;
     else if (y >= map[layer][x].capacity()) return 0;
@@ -77,14 +71,16 @@ void Level::LoadMap() {
 		exit(map->GetErrorCode());
 	}
             
-    LoadTilesets(map);
+    LoadTiles(map);
     
     LoadObjects(map);
 }
 
-void Level::LoadTilesets(Tmx::Map* map) {
+void Level::LoadTiles(Tmx::Map* map) {
     sf::Image img;
     tileSize = map->GetTileWidth();
+    int layers = map->GetNumLayers();
+    SetDimensions(layers, map->GetWidth(), map->GetHeight());
     
     // Iterate through the tilesets.
 	for (int i = 0; i < map->GetNumTilesets(); ++i) {
@@ -104,14 +100,11 @@ void Level::LoadTilesets(Tmx::Map* map) {
                 tileImage.create(tileSize, tileSize);
                 tileImage.loadFromImage(img, sf::IntRect(x * tileSize, y * tileSize, tileSize, tileSize));
                 
-                //Add the image to our image list
-                imageManager.AddImage(tileImage, i);
+                //Add the image to our tileset
+                this->tileset[i] = tileImage;
             }
         }
 	}
-    
-    int layers = map->GetNumLayers();    
-    SetDimensions(layers, map->GetWidth(), map->GetHeight());
         
     for (int i = 0; i < layers; ++i) {
         const Tmx::Layer *layer = map->GetLayer(i);
@@ -122,7 +115,7 @@ void Level::LoadTilesets(Tmx::Map* map) {
                 int id = layer->GetTileId(x, y);
                 
                 if (id) {
-                    Tile* newTile = new Tile(imageManager.GetImage(id));
+                    Tile* newTile = new Tile(this->tileset[id]);
                     AddTile(i, x, y, newTile);
                 }
             }
@@ -172,7 +165,8 @@ const vector<Sprite*>* Level::GetSprites() {
     return spriteManager.GetSprites();
 }
 
-void Level::Update(Camera* camera) {
+void Level::Update(Camera* camera, Player* player) {
+    spriteManager.CheckCollisions(player, this);
     spriteManager.Update(camera, this);
 }
 

@@ -1,4 +1,4 @@
-//
+   //
 //  Sprite.cpp
 //  HeroMustSavePrincess
 //
@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
 //
 
+#include "Level.h"
 #include "Sprite.h"
 #include <time.h>
 #include <math.h>
@@ -189,21 +190,7 @@ Corners Sprite::GetTileCollisions(Level* level, int x, int y) {
     return {downY, upY, leftX, rightX, upLeft, downLeft, upRight, downRight};
 }
 
-void Sprite::CheckSpriteCollisions(const vector<Sprite*>* sprites, Level* level) {
-    vector<Sprite*>::const_iterator i;
-    for (i = sprites->begin(); i < sprites->end(); i++) {
-        if ((*i) != this && (*i)->GetHealth()) {
-            int xdist = ((*i)->GetPosition().x + (*i)->GetWidth()/2 +1) - (position.x + width/2);
-            int ydist = ((*i)->GetPosition().y + (*i)->GetHeight()/2 +1) - (position.y + height/2);
-            
-            if (sqrt(xdist*xdist+ydist*ydist) < (*i)->GetWidth()/2 + width/2) {
-                HandleCollision(*i, level);
-            }
-        }
-    }
-}
-
-void Sprite::HandleCollision(Sprite* sprite, Level* level) {
+void Sprite::HandleCollision(Sprite* sprite) {
     switch (currAction) {
         case NORTH: SetAction(SOUTH);
             break;
@@ -236,9 +223,7 @@ void Sprite::SetAction(ActionType action) {
 void Sprite::Update(Camera* camera, Level* level) {    
     sf::Vector2i camPosition = camera->GetPosition();
     sf::Vector2i camSize = camera->GetSize();
-    
-    int speed = GetSpeed();
-    
+        
     switch (currAction) {
         case WEST: Move(level, -speed, 0);
             break;
@@ -272,11 +257,9 @@ void Sprite::Draw(sf::RenderWindow* rw, Camera* camera) {
         animation = currAction;
     }
     
-    if (visible) {
-        if (life) {
-            animations[animation]->Draw(rw, image, position - camera->GetPosition());
-        } else {
-            animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
-        }
+    if (life) {
+        animations[animation]->Draw(rw, image, position - camera->GetPosition());
+    } else {
+        animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
     }
 }

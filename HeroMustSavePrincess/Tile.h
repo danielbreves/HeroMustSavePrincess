@@ -21,7 +21,6 @@ public:
 	Tile(sf::Texture& image);
 	~Tile();
     
-    sf::IntRect GetRect();
 	void Draw(int x, int y, sf::RenderWindow* rw);
 };
 

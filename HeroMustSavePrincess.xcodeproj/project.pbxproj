@@ -12,7 +12,7 @@
 		12017D02164FA0BC00BCDE50 /* silkworm.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12017D00164FA0BC00BCDE50 /* silkworm.ttf */; };
 		12017D04164FB4C100BCDE50 /* bebasneue.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12017D03164FB4C100BCDE50 /* bebasneue.ttf */; };
 		12017D0A164FBC7F00BCDE50 /* hero_full.png in Resources */ = {isa = PBXBuildFile; fileRef = 12017D09164FBC7F00BCDE50 /* hero_full.png */; };
-		12017D0D1650A86900BCDE50 /* GameMessageState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12017D0B1650A86800BCDE50 /* GameMessageState.cpp */; };
+		12017D0D1650A86900BCDE50 /* MessageState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12017D0B1650A86800BCDE50 /* MessageState.cpp */; };
 		12017D101650AEA300BCDE50 /* AboutState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12017D0E1650AEA200BCDE50 /* AboutState.cpp */; };
 		12017D161650B46700BCDE50 /* arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12017D151650B46700BCDE50 /* arial.ttf */; };
 		12017D1A1650C4F200BCDE50 /* princess.png in Resources */ = {isa = PBXBuildFile; fileRef = 12017D191650C4F200BCDE50 /* princess.png */; };
@@ -66,7 +66,6 @@
 		12C9C699164A383E00F1F2D8 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C698164A383E00F1F2D8 /* ResourcePath.mm */; };
 		12C9C6A4164A383E00F1F2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C6A2164A383E00F1F2D8 /* InfoPlist.strings */; };
 		12C9C6AC164A386500F1F2D8 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6AA164A386500F1F2D8 /* Engine.cpp */; };
-		12C9C6BF164A3D9500F1F2D8 /* ImageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6BD164A3D9500F1F2D8 /* ImageManager.cpp */; };
 		12C9C6C2164A402800F1F2D8 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6C0164A402800F1F2D8 /* Tile.cpp */; };
 		12C9C6CB164A461E00F1F2D8 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6C9164A461E00F1F2D8 /* Camera.cpp */; };
 		12C9C6CE164A5E5100F1F2D8 /* Level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6CC164A5E5100F1F2D8 /* Level.cpp */; };
@@ -84,8 +83,8 @@
 		12017D00164FA0BC00BCDE50 /* silkworm.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = silkworm.ttf; sourceTree = "<group>"; };
 		12017D03164FB4C100BCDE50 /* bebasneue.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = bebasneue.ttf; sourceTree = "<group>"; };
 		12017D09164FBC7F00BCDE50 /* hero_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hero_full.png; sourceTree = "<group>"; };
-		12017D0B1650A86800BCDE50 /* GameMessageState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMessageState.cpp; sourceTree = "<group>"; };
-		12017D0C1650A86900BCDE50 /* GameMessageState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMessageState.h; sourceTree = "<group>"; };
+		12017D0B1650A86800BCDE50 /* MessageState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageState.cpp; sourceTree = "<group>"; };
+		12017D0C1650A86900BCDE50 /* MessageState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageState.h; sourceTree = "<group>"; };
 		12017D0E1650AEA200BCDE50 /* AboutState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AboutState.cpp; sourceTree = "<group>"; };
 		12017D0F1650AEA300BCDE50 /* AboutState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutState.h; sourceTree = "<group>"; };
 		12017D151650B46700BCDE50 /* arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = arial.ttf; sourceTree = "<group>"; };
@@ -174,8 +173,6 @@
 		12C9C6A3164A383E00F1F2D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		12C9C6AA164A386500F1F2D8 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Engine.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		12C9C6AB164A386500F1F2D8 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Engine.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		12C9C6BD164A3D9500F1F2D8 /* ImageManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = ImageManager.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		12C9C6BE164A3D9500F1F2D8 /* ImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageManager.h; sourceTree = "<group>"; };
 		12C9C6C0164A402800F1F2D8 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tile.cpp; sourceTree = "<group>"; };
 		12C9C6C1164A402800F1F2D8 /* Tile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tile.h; sourceTree = "<group>"; };
 		12C9C6C9164A461E00F1F2D8 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
@@ -326,8 +323,8 @@
 				12017CEF164F8F5700BCDE50 /* MenuState.h */,
 				12017D0E1650AEA200BCDE50 /* AboutState.cpp */,
 				12017D0F1650AEA300BCDE50 /* AboutState.h */,
-				12017D0B1650A86800BCDE50 /* GameMessageState.cpp */,
-				12017D0C1650A86900BCDE50 /* GameMessageState.h */,
+				12017D0B1650A86800BCDE50 /* MessageState.cpp */,
+				12017D0C1650A86900BCDE50 /* MessageState.h */,
 				12017CED164F8F5700BCDE50 /* GameState.h */,
 				12017CF2164F8F5700BCDE50 /* StateManager.cpp */,
 				12017CF3164F8F5700BCDE50 /* StateManager.h */,
@@ -348,8 +345,6 @@
 				12C9C6CA164A461E00F1F2D8 /* Camera.h */,
 				12C9C6C0164A402800F1F2D8 /* Tile.cpp */,
 				12C9C6C1164A402800F1F2D8 /* Tile.h */,
-				12C9C6BD164A3D9500F1F2D8 /* ImageManager.cpp */,
-				12C9C6BE164A3D9500F1F2D8 /* ImageManager.h */,
 				12C9C6AA164A386500F1F2D8 /* Engine.cpp */,
 				12C9C6AB164A386500F1F2D8 /* Engine.h */,
 				12C9C698164A383E00F1F2D8 /* ResourcePath.mm */,
@@ -505,7 +500,6 @@
 				12C9C697164A383E00F1F2D8 /* main.cpp in Sources */,
 				12C9C699164A383E00F1F2D8 /* ResourcePath.mm in Sources */,
 				12C9C6AC164A386500F1F2D8 /* Engine.cpp in Sources */,
-				12C9C6BF164A3D9500F1F2D8 /* ImageManager.cpp in Sources */,
 				12C9C6C2164A402800F1F2D8 /* Tile.cpp in Sources */,
 				12C9C6CB164A461E00F1F2D8 /* Camera.cpp in Sources */,
 				12C9C6CE164A5E5100F1F2D8 /* Level.cpp in Sources */,
@@ -546,7 +540,7 @@
 				121B3613164CE7DA00E85D3A /* tinyxmlparser.cpp in Sources */,
 				12017CF4164F8F5700BCDE50 /* MenuState.cpp in Sources */,
 				12017CF6164F8F5700BCDE50 /* StateManager.cpp in Sources */,
-				12017D0D1650A86900BCDE50 /* GameMessageState.cpp in Sources */,
+				12017D0D1650A86900BCDE50 /* MessageState.cpp in Sources */,
 				12017D101650AEA300BCDE50 /* AboutState.cpp in Sources */,
 				12017D1D1650C5D500BCDE50 /* Princess.cpp in Sources */,
 			);

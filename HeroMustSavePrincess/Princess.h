@@ -17,9 +17,9 @@ class Princess : public Sprite {
     
 public:
     Princess(sf::Texture &img, sf::Vector2i p, int w, int h);
-    ~Princess();
     void CreateAnimations(int rows);
-    void HandleCollision(Sprite* sprite, Level* level);
+    void Hit(ActionType action, Level* level);
+    void HandleCollision(Sprite* sprite) {};
     void Update(Camera* camera, Level* level);
     void Draw(sf::RenderWindow* rw, Camera* camera);
 };

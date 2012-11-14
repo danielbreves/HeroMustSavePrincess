@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
 //
 
+#include "Level.h"
 #include "Princess.h"
-
 #include "Princess.h"
 #include <algorithm>
 
@@ -26,10 +26,6 @@ Princess::Princess(sf::Texture &img, sf::Vector2i p, int w, int h) {
     
     CreateAnimations(3);
     currAction = SOUTH;
-}
-
-Princess::~Princess() {
-    
 }
 
 void Princess::CreateAnimations(int rows) {    
@@ -56,9 +52,14 @@ void Princess::CreateAnimations(int rows) {
     AddAnimation(DIE, die);
 }
 
-void Princess::HandleCollision(Sprite* sprite, Level* level) {
-    if (life == 1) SetAction(DIE);
+void Princess::Hit(ActionType action, Level* level) {
+    level->SetStatus(Level::LOST);
     
+    if (life == 1) {
+        SetAction(DIE);
+        level->SetStatus(Level::LOST);
+    }
+
     life--;
 }
 

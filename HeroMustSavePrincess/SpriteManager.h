@@ -11,10 +11,9 @@
 
 #include <iostream>
 #include <vector>
+#include "Player.h"
 #include "Animation.h"
-//#include "Sprite.h"
 #include "Camera.h"
-//#include "Level.h"
 using namespace std;
 
 class Level;
@@ -28,6 +27,8 @@ public:
     ~SpriteManager();
     
     const vector<Sprite*>* GetSprites() const;
+    void CheckCollisions(Player* player, Level* level);
+    bool CheckCollision(Sprite* A, Sprite* B);
     void AddSprite(Sprite* sprite);
     void Update(Camera* camera, Level* level);
     void Draw(sf::RenderWindow* rw, Camera* camera);

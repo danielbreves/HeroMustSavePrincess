@@ -9,7 +9,7 @@
 #include "Engine.h"
 #include "Animation.h"
 #include "MenuState.h"
-#include "GameMessageState.h"
+#include "MessageState.h"
 #include "StateManager.h"
 #include "ResourcePath.hpp"
 #include <sstream>
@@ -38,23 +38,20 @@ void Engine::Init(StateManager* manager)
 {
     sf::Vector2i videoSize = (sf::Vector2i)manager->GetWindow()->getSize();
     
-    levels[current].LoadMap();
+    levels.front().LoadMap();
     
-    int tileSize = levels[current].GetTileSize();
-    int centerX = (levels[current].GetWidth() * tileSize - videoSize.x)/2;
-    int centerY = (levels[current].GetHeight() * tileSize - videoSize.y)/2;
+    int tileSize = levels.front().GetTileSize();
+    int centerX = (levels.front().GetWidth() * tileSize - videoSize.x)/2;
+    int centerY = (levels.front().GetHeight() * tileSize - videoSize.y)/2;
     
     camera.Move(centerX, centerY);
     
-    player->SetPosition(levels[current].GetPlayerPosition());
+    player->SetPosition(levels.front().GetPlayerPosition());
 }
 
 void Engine::CreateLevels() {
-    Level level0 = Level(resourcePath() + "tiled_test6.tmx");
-    levels.push_back(level0);
-    
-    Level level1 = Level(resourcePath() + "level_momo.tmx");
-    levels.push_back(level1);
+    levels.push(Level(resourcePath() + "tiled_test6.tmx"));
+    levels.push(Level(resourcePath() + "level_momo.tmx"));
 }
 
 void Engine::HandleEvents(StateManager* manager)
@@ -92,32 +89,34 @@ void Engine::HandleEvents(StateManager* manager)
 
 void Engine::Update(StateManager* manager)
 {
-    if (!player->GetHealth() || levels[current].GetStatus() == Level::LOST) {
+    if (!player->GetHealth() || levels.front().GetStatus() == Level::LOST) {
         sf::sleep(sf::seconds(1.2f));
-        manager->ChangeState(new GameMessageState("Game Over", 60, new MenuState));
+        manager->ChangeState(new MessageState("Game Over", 60, new MenuState));
     }
-    else if (levels[current].GetStatus() == Level::COMPLETE) {
-        if (current == levels.size() - 1) {
+    else if (levels.front().GetStatus() == Level::COMPLETE) {
+        levels.pop();
+
+        if (levels.empty()) {
             sf::sleep(sf::seconds(1.2f));
-            manager->ChangeState(new GameMessageState("You won!", 60, new MenuState));
+            manager->ChangeState(new MessageState("You won!", 60, new MenuState));
         } else {
-            ++current;
+            currLevel++;
             std::stringstream ss;
-            ss << "Level " << current + 1;
+            ss << "Level " << currLevel;
             sf::sleep(sf::seconds(1.0f));
-            manager->ChangeState(new GameMessageState(ss.str(), 60, this));
+            manager->ChangeState(new MessageState(ss.str(), 60, this));
         }
     }
     else {
-        player->Update(levels[current].GetSprites(), &levels[current]);
-        camera.MoveCenter(&levels[current], player->GetPosition().x, player->GetPosition().y);
-        levels[current].Update(&camera);
+        player->Update(levels.front().GetSprites(), &levels.front());
+        camera.MoveCenter(&levels.front(), player->GetPosition().x, player->GetPosition().y);
+        levels.front().Update(&camera, player);
     }
 }
 
 void Engine::Render(StateManager* manager)
 {
-    levels[current].Draw(manager->GetWindow(), &camera);
+    levels.front().Draw(manager->GetWindow(), &camera);
     
     player->Draw(manager->GetWindow(), &camera);
 }

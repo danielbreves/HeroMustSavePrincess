@@ -11,12 +11,12 @@
 
 #include <iostream>
 #include <SFML/Audio.hpp>
-#include "SpriteManager.h"
 #include "Sprite.h"
+
+class Level;
 
 class Player : public Sprite {
     sf::Texture heart;
-    int speed;
     sf::SoundBuffer no;
     sf::SoundBuffer hit;
     sf::SoundBuffer kiss;
@@ -25,7 +25,6 @@ class Player : public Sprite {
 public:
     Player() {};
     Player(sf::Texture &img, int w, int h, int speed);
-    ~Player();
     void CreateAnimations(int rows);
     void Move(Level* level, int x, int y);
     void HandleCollision(Sprite* sprite, Level* level);

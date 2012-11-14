@@ -11,10 +11,8 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <queue>
 #include "GameState.h"
-#include "ImageManager.h"
-#include "SpriteManager.h"
 #include "Camera.h"
 #include "Level.h"
 #include "Tile.h"
@@ -23,8 +21,8 @@
 class Engine : public GameState {
     Player *player;
     Camera camera;
-    std::vector<Level> levels;
-    int current = 0;
+    std::queue<Level> levels;
+    int currLevel = 1;
     
 public:
 	Engine();
