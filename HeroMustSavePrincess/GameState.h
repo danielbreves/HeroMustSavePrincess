@@ -15,13 +15,13 @@
 class StateManager;
 
 class GameState {
-
-public:    
+    
+public:
     GameState() {}
-    virtual ~GameState() {};
+    virtual ~GameState() {}
     
     virtual void Init(StateManager* manager) = 0;
-    
+
     virtual void HandleEvents(StateManager* manager) = 0;
     virtual void Update(StateManager* manager) = 0;
     virtual void Render(StateManager* manager) = 0;

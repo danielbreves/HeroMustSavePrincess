@@ -13,13 +13,16 @@
 #include "GameState.h"
 
 class AboutState : public GameState {
+    sf::Font silkworm, bebasneue, arial;
+    sf::Text title, about, back;
     
 public:
-    AboutState();
-    ~AboutState();
+    AboutState() {};
+    ~AboutState() {};
     
     void Init(StateManager* manager);
     
+    void CreateLayout(sf::Vector2u windowSize);
     void HandleEvents(StateManager* manager);
     void Update(StateManager* manager);
     void Render(StateManager* manager);

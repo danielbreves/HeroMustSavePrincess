@@ -28,7 +28,6 @@ class Animation {
     
 public:
     Animation();
-    void Reset();
     void AddFrame(sf::IntRect image, sf::Uint32 duration);
     void Update();
     void Draw(sf::RenderWindow* rw, const sf::Texture* texture, const sf::Vector2i position);

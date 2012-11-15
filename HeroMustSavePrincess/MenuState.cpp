@@ -15,45 +15,84 @@
 #include "AboutState.h"
 #include "Engine.h"
 
-MenuState::MenuState() {
-    menuOptions.push_back("PLAY");
-    menuOptions.push_back("ABOUT");
-    menuOptions.push_back("EXIT");
+
+void MenuState::Init(StateManager* manager) {
+    int titleSize = 60;
+    int optionSize = 24;
+    
+    // Load from a font file on disk
+    if (!bebasneue.loadFromFile(resourcePath() + "bebasneue.ttf"))
+    {
+        printf("Could not load bebasneue.ttf\n");
+        manager->Quit();
+    }
+    
+    // Load from a font file on disk
+    if (!silkworm.loadFromFile(resourcePath() + "silkworm.ttf"))
+    {
+        printf("Could not load silkworm\n");
+        manager->Quit();
+    }
+    
+    title = sf::Text("HERO MUST\nSAVE PRINCESS", bebasneue, titleSize);
+    menuOptions.push_back(sf::Text("PLAY", silkworm, optionSize));
+    menuOptions.push_back(sf::Text("ABOUT", silkworm, optionSize));
+    menuOptions.push_back(sf::Text("EXIT", silkworm, optionSize));
+    
+    sf::Vector2u windowSize = manager->GetWindow()->getSize();
+    
+    CreateLayout(windowSize);
     
     selected = 0;
 }
 
-MenuState::~MenuState() {
-}
-
-void MenuState::Init(StateManager* manager) {
-
+void MenuState::CreateLayout(sf::Vector2u windowSize) {
+    int titlePadding = 50;
+    int optionPadding = 15;
+    
+    int yMenu = (windowSize.y - title.getGlobalBounds().height - titlePadding - menuOptions.size() * (menuOptions[0].getGlobalBounds().height + optionPadding) )/2;
+    
+    title.setPosition((windowSize.x - title.getGlobalBounds().width)/2, yMenu);
+    title.setColor(sf::Color(255, 0, 0));
+    title.setStyle(sf::Text::Bold);
+    
+    yMenu += title.getGlobalBounds().height + titlePadding;
+    
+    for (int i = 0; i < menuOptions.size(); i++ ) {
+        menuOptions[i].setPosition((windowSize.x - menuOptions[i].getGlobalBounds().width)/2, yMenu);
+        
+        yMenu += menuOptions[i].getGlobalBounds().height + optionPadding;
+    }
 }
 
 void MenuState::HandleEvents(StateManager* manager) {
     sf::Event evt;
-	//Loop through all window events
+
 	while(manager->GetWindow()->pollEvent(evt))
 	{
 		if(evt.type == sf::Event::Closed) {
 			manager->GetWindow()->close();
 		}
+        
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Escape)) {
 			manager->Quit();
 		}
+        
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Up)) {
 			if (selected != 0) {
                 selected--;
             }
 		}
+        
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Down)) {
 			if (selected < menuOptions.size() - 1) {
                 selected++;
             }
 		}
+        
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Return)) {
             sf::Vector2u windowSize = manager->GetWindow()->getSize();
-            
+               
 			switch (selected) {
                 case 0:
                     manager->ChangeState(new MessageState("Level 1", 60, new Engine(windowSize.x,windowSize.y)));
@@ -73,62 +112,20 @@ void MenuState::HandleEvents(StateManager* manager) {
 }
 
 void MenuState::Update(StateManager* manager) {
-    
+    for (int i = 0; i < menuOptions.size(); i++ ) {
+        if (i == selected) {
+            menuOptions[i].setColor(sf::Color(0, 255, 0));
+        } else {
+            menuOptions[i].setColor(sf::Color(255, 255, 255));
+        }
+    }
 }
 
 void MenuState::Render(StateManager* manager) {
-    int titleSize = 60;
-    int titlePadding = 50;
-    int optionSize = 24;
-    int optionPadding = 15;
-    
-    sf::Vector2u windowSize = manager->GetWindow()->getSize();
-    
-    sf::Font silkworm, bebasneue;
-    
-    // Load from a font file on disk
-    if (!bebasneue.loadFromFile(resourcePath() + "bebasneue.ttf"))
-    {
-        printf("Could not load bebasneue.ttf\n");
-        manager->Quit();
-    }
-    
-    // Load from a font file on disk
-    if (!silkworm.loadFromFile(resourcePath() + "silkworm.ttf"))
-    {
-        printf("Could not load silkworm\n");
-        manager->Quit();
-    }
-    
-    sf::Text title("HERO MUST\nSAVE PRINCESS", bebasneue, titleSize);
-    sf::Text option("Sample", silkworm, optionSize);
-
-    title.setColor(sf::Color(255, 0, 0));
-    title.setStyle(sf::Text::Bold);
-    
-    int yMenu = (windowSize.y - title.getGlobalBounds().height - titlePadding - menuOptions.size() * (option.getGlobalBounds().height + optionPadding) )/2;
-    
-    title.setPosition((windowSize.x - title.getGlobalBounds().width)/2, yMenu);
-    
     manager->GetWindow()->draw(title);
     
-    yMenu += title.getGlobalBounds().height + titlePadding;
-    
     for (int i = 0; i < menuOptions.size(); i++ ) {        
-        sf::Text option(menuOptions[i], silkworm, optionSize);
-        
-        if (i == selected) {
-            option.setColor(sf::Color(0, 255, 0));
-        } else {
-            option.setColor(sf::Color(255, 255, 255));
-        }
-        
-        option.setPosition((windowSize.x - option.getGlobalBounds().width)/2, yMenu);
-        
-        manager->GetWindow()->draw(option);
-        
-        yMenu += option.getGlobalBounds().height + optionPadding;
+        manager->GetWindow()->draw(menuOptions[i]);
     }
-    
 }
 

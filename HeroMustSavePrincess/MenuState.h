@@ -14,15 +14,18 @@
 #include "GameState.h"
 
 class MenuState : public GameState {
-    std::vector<std::string> menuOptions;
+    sf::Font silkworm, bebasneue;
+    sf::Text title;
+    std::vector<sf::Text> menuOptions;
     int selected;
     
 public:
-    MenuState();
-    ~MenuState();
+    MenuState() {};
+    ~MenuState() {};
     
     void Init(StateManager* manager);
     
+    void CreateLayout(sf::Vector2u windowSize);
     void HandleEvents(StateManager* manager);
     void Update(StateManager* manager);
     void Render(StateManager* manager);

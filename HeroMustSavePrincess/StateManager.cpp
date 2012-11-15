@@ -10,6 +10,11 @@
 #include "GameState.h"
 
 StateManager::StateManager(sf::RenderWindow* rw, GameState* start) {
+    if (!music.openFromFile(resourcePath() + "Midiman.ogg"))
+        exit(EXIT_FAILURE);
+    
+    PlayMusic();
+    
     window = rw;
     running = true;
     prev = NULL;
@@ -22,11 +27,20 @@ StateManager::~StateManager() {
     delete current;
 }
 
+void StateManager::PlayMusic() {
+    music.play();
+}
+
+void StateManager::StopMusic() {
+    music.stop();
+}
+
 void StateManager::ChangeState(GameState* toState) {
 	if (toState != prev) {
         delete prev;
 	}
     
+    prev = current;
     current = toState;
     current->Init(this);
 }

@@ -7,8 +7,6 @@
 //
 
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include "ResourcePath.hpp"
 #include "StateManager.h"
 #include "MenuState.h"
 
@@ -24,14 +22,8 @@ int main (int argc, const char * argv[]) {
     
     if(!window)
 		return EXIT_FAILURE;
-    
-    sf::Music music;
-    if (!music.openFromFile(resourcePath() + "Midiman.ogg"))
-        return EXIT_FAILURE;
-    
-    music.play();
         
-    StateManager manager(window, new MenuState());
+    StateManager manager(window, new MenuState);
         
     sf::Int32 timelastcall = clock.getElapsedTime().asMilliseconds();
     
@@ -43,8 +35,6 @@ int main (int argc, const char * argv[]) {
         }
         manager.Render();
 	}
-    
-    music.stop();
     
     delete window;
 

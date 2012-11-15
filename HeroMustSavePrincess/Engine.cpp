@@ -31,7 +31,7 @@ Engine::Engine(int width, int height) {
 
 Engine::~Engine()
 {    
-    
+    delete player;
 }
 
 void Engine::Init(StateManager* manager)
@@ -65,6 +65,14 @@ void Engine::HandleEvents(StateManager* manager)
 		}
         if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Escape)) {
 			manager->ChangeState(new MenuState);
+		}
+        
+        if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Num1)) {
+			manager->StopMusic();
+		}
+        
+        if(evt.type == sf::Event::KeyPressed && (evt.key.code == sf::Keyboard::Num2)) {
+			manager->PlayMusic();
 		}
 	}
     
@@ -103,7 +111,7 @@ void Engine::Update(StateManager* manager)
             currLevel++;
             std::stringstream ss;
             ss << "Level " << currLevel;
-            sf::sleep(sf::seconds(1.0f));
+            sf::sleep(sf::seconds(1.2f));
             manager->ChangeState(new MessageState(ss.str(), 60, this));
         }
     }

@@ -14,16 +14,19 @@
 
 class MessageState : public GameState {
     GameState* nextState;
+    sf::Font bebasneue;
+    sf::Text title;
     std::string message;
     int frames;
     
 public:
-    MessageState();
+    MessageState() {};
     MessageState(std::string msg, int f, GameState* next);
-    ~MessageState();
+    ~MessageState() {}
     
     void Init(StateManager* manager);
     
+    void CreateLayout(sf::Vector2u windowSize);
     void HandleEvents(StateManager* manager);
     void Update(StateManager* manager);
     void Render(StateManager* manager);

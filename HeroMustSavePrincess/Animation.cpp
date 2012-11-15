@@ -13,10 +13,6 @@ Animation::Animation() {
     ticks = clock.getElapsedTime();
 }
 
-void Animation::Reset() {
-    frames.clear();
-}
-
 void Animation::AddFrame(sf::IntRect image, sf::Uint32 duration) {
     Frame frame = {image, duration};
     frames.push_back(frame);

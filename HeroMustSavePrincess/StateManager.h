@@ -10,10 +10,13 @@
 #define __HeroMustSavePrincess__StateManager__
 
 #include <iostream>
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include "ResourcePath.hpp"
 #include "GameState.h"
 
 class StateManager {
+    sf::Music music;
     bool running;
     GameState* prev;
     GameState* current;
@@ -23,6 +26,8 @@ public:
     StateManager(sf::RenderWindow* rw, GameState* start);
     ~StateManager();
     
+    void PlayMusic();
+    void StopMusic();
     void ChangeState(GameState* state);
     sf::RenderWindow* GetWindow() {return window;}
     void HandleEvents();
