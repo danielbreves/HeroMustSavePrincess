@@ -1,4 +1,4 @@
-   //
+//
 //  Sprite.cpp
 //  HeroMustSavePrincess
 //
@@ -123,7 +123,10 @@ void Sprite::Hit(ActionType action, Level* level) {
             break;
     }
     
-    if (life == 1) SetAction(DIE);
+    if (life == 1) {
+        SetAction(DIE);
+        image = &(*blood);
+    }
     
     life--;
 }
@@ -172,6 +175,7 @@ void Sprite::Move(Level* level, int x, int y) {
 }
 
 // absolute x and y
+// Based on Tutorial by Tony: http://www.tonypa.pri.ee/tbw/tut05.html
 Corners Sprite::GetTileCollisions(Level* level, int x, int y) {
     int downY, upY, leftX, rightX;
     Tile *upLeft, *downLeft, *upRight, *downRight;
@@ -256,10 +260,8 @@ void Sprite::Draw(sf::RenderWindow* rw, Camera* camera) {
     } else {
         animation = currAction;
     }
-    
-    if (life) {
-        animations[animation]->Draw(rw, image, position - camera->GetPosition());
-    } else {
-        animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
+
+    if (visible) {
+        animations[currAction]->Draw(rw, image, position - camera->GetPosition());
     }
 }

@@ -181,15 +181,11 @@ void Player::Draw(sf::RenderWindow* rw, Camera* camera) {
         animation = currAction;
     }
     
-    if (life) {
-        if (attacking) {
-            animation = static_cast<Sprite::ActionType> ((int)animation + 5);
-        }
-    
-        animations[animation]->Draw(rw, image, position - camera->GetPosition());
-    } else {
-        animations[animation]->Draw(rw, &(*blood), position - camera->GetPosition());
+    if (life && attacking) {
+        animation = static_cast<Sprite::ActionType> ((int)animation + 5);
     }
+    
+    animations[animation]->Draw(rw, image, position - camera->GetPosition());
     
     for (int i = 1, x = 15; i <= life; i++, x += lifeImg.getGlobalBounds().width + 5) {
         lifeImg.setPosition(x, 15);

@@ -19,7 +19,6 @@ private:
     
 public:
 	Tile(sf::Texture& image);
-	~Tile();
     
 	void Draw(int x, int y, sf::RenderWindow* rw);
 };

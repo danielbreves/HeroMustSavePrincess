@@ -49,10 +49,6 @@ void Level::SetDimensions(int layers, int w, int h)
     }
 }
 
-void Level::AddTile(int layer, int x, int y, Tile* tile) {
-	map[layer][x][y] = tile;
-}
-
 Tile* Level::GetTile(unsigned int layer, unsigned int x, unsigned int y) {
     if (layer >= map.capacity()) return 0;
     else if (x >= map[layer].capacity()) return 0;
@@ -71,12 +67,12 @@ void Level::LoadMap() {
 		exit(map->GetErrorCode());
 	}
             
-    LoadTiles(map);
+    LoadTilesets(map);
     
     LoadObjects(map);
 }
 
-void Level::LoadTiles(Tmx::Map* map) {
+void Level::LoadTilesets(Tmx::Map* map) {
     sf::Image img;
     tileSize = map->GetTileWidth();
     int layers = map->GetNumLayers();
@@ -106,17 +102,19 @@ void Level::LoadTiles(Tmx::Map* map) {
         }
 	}
         
+    LoadTiles(map, layers);
+}
+
+void Level::LoadTiles(Tmx::Map* map, int layers) {
     for (int i = 0; i < layers; ++i) {
         const Tmx::Layer *layer = map->GetLayer(i);
-                
+        
         for (int y = 0; y < layer->GetHeight(); ++y) {
             for (int x = 0; x < layer->GetWidth(); ++x) {
-                //Get all the attributes
                 int id = layer->GetTileId(x, y);
                 
                 if (id) {
-                    Tile* newTile = new Tile(this->tileset[id]);
-                    AddTile(i, x, y, newTile);
+                    this->map[i][x][y] = new Tile(this->tileset[id]);
                 }
             }
         }
@@ -170,13 +168,13 @@ void Level::Update(Camera* camera, Player* player) {
     spriteManager.Update(camera, this);
 }
 
+// Based on Tutorial by RevTorA: http://www.dreamincode.net/forums/topic/230524-c-tile-engine-from-scratch-part-1/
 void Level::Draw(sf::RenderWindow* rw, Camera* camera) {    
-	//Camera offsets
 	int camOffsetX, camOffsetY;
     
 	Tile* tile;
     
-	//Get the tile bounds we need to draw and Camera bounds
+	//Get the tile bounds we need to draw
 	sf::IntRect bounds = camera->GetTileBounds(tileSize);
     
 	//Figure out how much to offset each tile
@@ -189,7 +187,6 @@ void Level::Draw(sf::RenderWindow* rw, Camera* camera) {
     for (int i = 0; i < layers; i++) {
         for (int y = 0, tileY = bounds.top; y < bounds.height; y++, tileY++) {
             for (int x = 0, tileX = bounds.left; x < bounds.width; x++, tileX++) {
-                //Get the tile we're drawing
                 tile = GetTile(i, tileX, tileY);
                 
                 if (tile) {

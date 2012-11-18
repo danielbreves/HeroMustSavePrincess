@@ -15,7 +15,6 @@
 #include "GameState.h"
 #include "Camera.h"
 #include "Level.h"
-#include "Tile.h"
 #include "Player.h"
 
 class Engine : public GameState {

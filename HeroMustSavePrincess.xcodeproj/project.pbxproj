@@ -64,7 +64,6 @@
 		12C9C694164A383E00F1F2D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12C9C693164A383E00F1F2D8 /* Foundation.framework */; };
 		12C9C697164A383E00F1F2D8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C696164A383E00F1F2D8 /* main.cpp */; };
 		12C9C699164A383E00F1F2D8 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C698164A383E00F1F2D8 /* ResourcePath.mm */; };
-		12C9C6A4164A383E00F1F2D8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12C9C6A2164A383E00F1F2D8 /* InfoPlist.strings */; };
 		12C9C6AC164A386500F1F2D8 /* Engine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6AA164A386500F1F2D8 /* Engine.cpp */; };
 		12C9C6C2164A402800F1F2D8 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6C0164A402800F1F2D8 /* Tile.cpp */; };
 		12C9C6CB164A461E00F1F2D8 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6C9164A461E00F1F2D8 /* Camera.cpp */; };
@@ -72,6 +71,8 @@
 		12C9C6E4164B515800F1F2D8 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6DE164B515700F1F2D8 /* Animation.cpp */; };
 		12C9C6E5164B515800F1F2D8 /* Sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6E0164B515800F1F2D8 /* Sprite.cpp */; };
 		12C9C6E6164B515800F1F2D8 /* SpriteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12C9C6E2164B515800F1F2D8 /* SpriteManager.cpp */; };
+		12F4B47516577F7200DD3C76 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 12F4B47216577F7200DD3C76 /* InfoPlist.strings */; };
+		12F4B47816577FBA00DD3C76 /* HeroMustSavePrincess-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 12F4B47716577FBA00DD3C76 /* HeroMustSavePrincess-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -169,8 +170,6 @@
 		12C9C696164A383E00F1F2D8 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		12C9C698164A383E00F1F2D8 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
 		12C9C69A164A383E00F1F2D8 /* ResourcePath.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ResourcePath.hpp; sourceTree = "<group>"; };
-		12C9C6A1164A383E00F1F2D8 /* HeroMustSavePrincess-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "HeroMustSavePrincess-Info.plist"; sourceTree = "<group>"; };
-		12C9C6A3164A383E00F1F2D8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		12C9C6AA164A386500F1F2D8 /* Engine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Engine.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		12C9C6AB164A386500F1F2D8 /* Engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Engine.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		12C9C6C0164A402800F1F2D8 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tile.cpp; sourceTree = "<group>"; };
@@ -185,6 +184,8 @@
 		12C9C6E1164B515800F1F2D8 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		12C9C6E2164B515800F1F2D8 /* SpriteManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteManager.cpp; sourceTree = "<group>"; };
 		12C9C6E3164B515800F1F2D8 /* SpriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteManager.h; sourceTree = "<group>"; };
+		12F4B47316577F7200DD3C76 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
+		12F4B47716577FBA00DD3C76 /* HeroMustSavePrincess-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HeroMustSavePrincess-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,16 +376,16 @@
 				12017D03164FB4C100BCDE50 /* bebasneue.ttf */,
 				12017D00164FA0BC00BCDE50 /* silkworm.ttf */,
 			);
-			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		12C9C6A0164A383E00F1F2D8 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				12C9C6A1164A383E00F1F2D8 /* HeroMustSavePrincess-Info.plist */,
-				12C9C6A2164A383E00F1F2D8 /* InfoPlist.strings */,
+				12F4B47716577FBA00DD3C76 /* HeroMustSavePrincess-Info.plist */,
+				12F4B47216577F7200DD3C76 /* InfoPlist.strings */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -440,7 +441,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12C9C6A4164A383E00F1F2D8 /* InfoPlist.strings in Resources */,
 				121B3530164BC58300E85D3A /* badguy.png in Resources */,
 				121B3544164C92D700E85D3A /* blood.png in Resources */,
 				121B35F3164CE61300E85D3A /* TmxParser.vcproj in Resources */,
@@ -458,6 +458,8 @@
 				1286AA4D16521C8000C39698 /* no.wav in Resources */,
 				1286AA4F1652235200C39698 /* tiled_test.jpg in Resources */,
 				1229FC15165237CD00C54DB8 /* heart.png in Resources */,
+				12F4B47516577F7200DD3C76 /* InfoPlist.strings in Resources */,
+				12F4B47816577FBA00DD3C76 /* HeroMustSavePrincess-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,12 +551,13 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		12C9C6A2164A383E00F1F2D8 /* InfoPlist.strings */ = {
+		12F4B47216577F7200DD3C76 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				12C9C6A3164A383E00F1F2D8 /* en */,
+				12F4B47316577F7200DD3C76 /* en */,
 			);
 			name = InfoPlist.strings;
+			path = ../en.lproj;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

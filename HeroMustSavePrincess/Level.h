@@ -30,9 +30,9 @@ class Level {
     std::string filename;
 	int width, height, tileSize;
     
-    void AddTile(int layer, int x, int y, Tile* tile);
 	void SetDimensions(int layers, int w, int h);
-    void LoadTiles(Tmx::Map* map);
+    void LoadTilesets(Tmx::Map* map);
+    void LoadTiles(Tmx::Map* map, int layers);
     void LoadObjects(Tmx::Map* map);
     
 public:

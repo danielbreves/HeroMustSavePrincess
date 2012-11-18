@@ -57,6 +57,7 @@ void Princess::Hit(ActionType action, Level* level) {
     
     if (life == 1) {
         SetAction(DIE);
+        image = &(*blood);
         level->SetStatus(Level::LOST);
     }
 
@@ -78,10 +79,6 @@ void Princess::Update(Camera* camera, Level* level) {
 
 void Princess::Draw(sf::RenderWindow* rw, Camera* camera) {
     if (visible) {
-        if (life) {
-            animations[currAction]->Draw(rw, image, position - camera->GetPosition());
-        } else {
-            animations[currAction]->Draw(rw, &(*blood), position - camera->GetPosition());
-        }
+        animations[currAction]->Draw(rw, image, position - camera->GetPosition());
     }
 }
