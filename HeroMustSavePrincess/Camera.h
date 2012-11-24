@@ -3,6 +3,7 @@
 //  HeroMustSavePrincess
 //
 //  Created by Daniel Breves on 7/11/12.
+//  Based on Tutorial by RevTorA: http://www.dreamincode.net/forums/topic/230524-c-tile-engine-from-scratch-part-1/
 //  Copyright (c) 2012 Daniel Breves. All rights reserved.
 //
 
@@ -24,7 +25,6 @@ public:
 	Camera(sf::IntRect video);
 	~Camera();
     
-	//Moves camera immediately to coordinates
 	void Move(int x, int y);
 	void MoveCenter(Level* level, int x, int y);
     

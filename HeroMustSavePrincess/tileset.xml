@@ -1,8 +1,0 @@
-<tileset>
-	<imagefile path="tileset_suburb.jpeg">
-		<tile x="0" y="0" frames="1" id="0"/>
-		<tile x="1" y="0" frames="1" id="1"/>
-		<tile x="2" y="0" frames="1" id="2"/>
-		<tile x="3" y="0" frames="1" id="3"/>
-	</imagefile>
-</tileset>

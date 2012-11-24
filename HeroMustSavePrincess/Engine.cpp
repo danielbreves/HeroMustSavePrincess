@@ -50,8 +50,8 @@ void Engine::Init(StateManager* manager)
 }
 
 void Engine::CreateLevels() {
-    levels.push(Level(resourcePath() + "tiled_test6.tmx"));
-    levels.push(Level(resourcePath() + "level_momo.tmx"));
+    levels.push(Level(resourcePath() + "level_1.tmx"));
+    levels.push(Level(resourcePath() + "level_2.tmx"));
 }
 
 void Engine::HandleEvents(StateManager* manager)
