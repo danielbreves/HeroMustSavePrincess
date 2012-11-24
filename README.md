@@ -1,8 +1,8 @@
-HeroMustSavePrincess
+# HeroMustSavePrincess
 
-This CD contain the source-code and project files for the game 'Hero Must Save Princess', developed by Daniel Breves Ribeiro for the unit HIT3243 Games Programming.
+_HeroMustSavePrincess_ is a classic 2D top-down RPG game, developed by Daniel Breves for the unit HIT3243 Games Programming at Swinburne University.
 
-The game has been built on OS X and include the project files for Xcode. It depends on the SFML library v2.0 and tmx-parser (included on the CD). Maps can be created using the Tiled map editor.
+The game has been built on OS X and include the project files for Xcode. It depends on the SFML library v2.0 and tmx-parser. Maps can be created using the Tiled map editor.
 
 SFML 2.0 
 http://sfml-dev.org/
