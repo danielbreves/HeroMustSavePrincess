@@ -4,6 +4,12 @@ _HeroMustSavePrincess_ is a classic 2D top-down RPG game, developed by Daniel Br
 
 The game has been built on OS X and include the project files for Xcode. It depends on the SFML library v2.0 and tmx-parser. Maps can be created using the Tiled map editor.
 
+See video demo [here](https://www.youtube.com/watch?v=W2aaxAPKUJc).
+
+<img width="381" alt="Screenshot 2023-08-10 at 11 28 16 am" src="https://github.com/danielbreves/HeroMustSavePrincess/assets/2517811/e4194f15-abe3-4f28-a53d-3c09c56c7b1b">
+
+
+
 SFML 2.0 
 http://sfml-dev.org/
 
